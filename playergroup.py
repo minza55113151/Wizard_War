@@ -11,5 +11,5 @@ class PlayerGroup(pygame.sprite.Group):
             if player.control:
                 return player
 
-    def create_player(self, pos, color, name, control=False, **kwargs):
-        return Player(pos, color, name, control, **kwargs)
+    def create_player(self, pos, skin, name, control=False, **kwargs):
+        return Player(pos, skin, name, control, **kwargs)

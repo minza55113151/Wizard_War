@@ -39,6 +39,13 @@ def load_ani(path, colorkey=(0, 0, 0), size=None):
     return ani
 
 
+def create_360(surface):
+    images = []
+    for i in range(360):
+        images.append(pygame.transform.rotate(surface, i))
+    return images
+
+
 def create_surface(size, color=(0, 0, 0), colorkey=(0, 0, 0)):
     surface = pygame.Surface(size).convert()
     surface.set_colorkey(colorkey)

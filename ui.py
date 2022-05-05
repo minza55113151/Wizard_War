@@ -164,14 +164,15 @@ class UIBorder(pygame.sprite.Sprite):
     def __init__(self, group, id):
         super().__init__(group)
         if id == "0":
-            self.image = create_surface((width, 50), color=(37, 25, 22))
-            self.rect = self.image.get_rect(bottomleft=(0, height))
-        if id == "1":
-            w = width//2 - 10 * (UI_element_image_size[0] + 1)//2 - 5
-            self.image = create_surface(
-                (width//3 - 20, 130), color=(37, 25, 22)
+            self.image = UI_border0_image
+            self.rect = self.image.get_rect(
+                bottomleft=UI_border0_image_bottomleft
             )
-            self.rect = self.image.get_rect(bottomleft=(w, height))
+        if id == "1":
+            self.image = UI_border1_image
+            self.rect = self.image.get_rect(
+                bottomleft=UI_border1_image_bottomleft
+            )
 
     def update(self):
         pass

@@ -4,13 +4,13 @@ from settings import *
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, color, name, control=False, **kwargs):
+    def __init__(self, pos, skin, name, control=False, **kwargs):
         self.screen = pygame.display.get_surface()
 
         self.client_sending_data = kwargs.get("client_sending_data")
         self.all_sprites_group = kwargs["all_sprites_group"]
         super().__init__(self.all_sprites_group["player"])
-        self.init_player_image(pos, color, name)
+        self.init_player_image(pos, skin, name)
         self.init_move_target_image()
 
         self.name = name
@@ -28,26 +28,30 @@ class Player(pygame.sprite.Sprite):
     def set_pcmc_vec(self, pcmc_vec):
         self.pcmc_vec = pcmc_vec
 
-    def init_player_image(self, pos, color, name):
+    def init_player_image(self, pos, skin, name):
         # setup original image
-        if color == "red":
-            self.origin_image = player_image_red
-        elif color == "green":
-            self.origin_image = player_image_green
+        if skin == "1":
+            self.origin_images = player_images1
+        if skin == "2":
+            self.origin_images = player_images2
+        if skin == "3":
+            self.origin_images = player_images3
+
         # setup text
-        draw_text_to_surface(
-            surface=self.origin_image,
-            font=create_font(10),
-            text=name,
-            text_color="white",
-            bg_color="black",
-            pos=[
-                player_image_size[0]//2,
-                player_image_size[1]//2
-            ]
-        )
+        # draw_text_to_surface(
+        #     surface=self.origin_image,
+        #     font=create_font(10),
+        #     text=name,
+        #     text_color="white",
+        #     bg_color=(1, 1, 1),
+        #     pos=[
+        #         player_image_size[0]//2,
+        #         player_image_size[1]//2
+        #     ]
+        # )
+
         # setup image and rect
-        self.image = self.origin_image
+        self.image = self.origin_images[0]
         self.rect = self.image.get_rect(center=pos)
 
         self.angle = 0
@@ -73,6 +77,8 @@ class Player(pygame.sprite.Sprite):
             self.move_target_image_frame + player_move_target_animation_speed) % self.move_target_image_len
         self.move_target_image = self.move_target_images[int(
             self.move_target_image_frame)]
+        self.image = self.origin_images[int(self.angle)]
+        self.rect = self.image.get_rect(center=self.rect.center)
 
     # def keyboard(self):
     #     keys = pygame.key.get_pressed()
@@ -96,6 +102,10 @@ class Player(pygame.sprite.Sprite):
             mouse[0] - width//2,
             mouse[1] - height//2
         )
+        self.angle = self.face_direction.angle_to(
+            pygame.math.Vector2(1, 0)
+        ) + 180
+        self.client_sending_data["angle"] = self.angle
 
     def set_target_pos(self):
         mouse = pygame.mouse.get_pos()
@@ -148,6 +158,7 @@ class Player(pygame.sprite.Sprite):
         elif self.speed == self.slow_speed:
             self.speed = self.normal_speed
         self.client_sending_data["speed"] = self.speed
+
     # def rotate(self):
     #     self.image = pygame.transform.rotate(self.origin_image, self.angle)
     #     self.rect = self.image.get_rect(center=self.rect.center)
@@ -162,4 +173,3 @@ class Player(pygame.sprite.Sprite):
             self.set_speed()
         self.move(dt)
         self.animation()
-        # self.rotate()

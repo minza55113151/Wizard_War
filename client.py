@@ -83,7 +83,7 @@ class Game:
         # setup player ----------------------------------------------------------
         self.player = self.player_sprites.create_player(
             pos=self.network.pos,
-            color="green",
+            skin="1",
             name="player " + self.id,
             control=True,
             client_sending_data=self.client_sending_data,
@@ -99,7 +99,7 @@ class Game:
             if other_player["player"] == None:
                 other_player["player"] = self.player_sprites.create_player(
                     pos=other_player["pos"],
-                    color="red",
+                    skin="2",
                     name="player " + player_id,
                     all_sprites_group=self.all_sprites_group
                 )
@@ -117,6 +117,7 @@ class Game:
             if other_player["event"]["target_pos"]:
                 other_player["player"].target_pos = other_player["event"]["target_pos"]
             other_player["player"].speed = other_player["speed"]
+            other_player["player"].angle = other_player["angle"]
 
     def network_update(self):
         # get data from server --------------------------------------------------

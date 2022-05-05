@@ -21,7 +21,18 @@ cursor_image_path = "assets/mouse/cursor/cursor.png"
 cursor_image = load_img(cursor_image_path)
 # endregion cursor settings
 # region player settings
-player_image_size = (50, 50)
+player_hitbox_size = (50, 50)
+player_image_size = (75, 75)
+player_image1_path = "assets/player/1.png"
+player_image1 = load_img(player_image1_path, size=player_image_size)
+player_images1 = create_360(player_image1)
+player_image2_path = "assets/player/1.png"
+player_image2 = load_img(player_image2_path, size=player_image_size)
+player_images2 = create_360(player_image2)
+player_image3_path = "assets/player/1.png"
+player_image3 = load_img(player_image3_path, size=player_image_size)
+player_images3 = create_360(player_image3)
+
 player_image_path_green = "assets/green.png"
 player_image_green = load_img(
     player_image_path_green, gb_colorkey, player_image_size
@@ -265,3 +276,18 @@ UI_meteor_images = load_ani(UI_meteor_image_path, size=UI_skill_image_size)
 UI_meteor_images.append(pygame.transform.scale(
     UI_meteor_images[1], UI_element_image_scaled_size
 ))
+# endregion UISkill settings
+# region UIBorder settings
+# 0.
+UI_border_color = (37, 25, 22)
+UI_border0_image_size = (width, 50)
+UI_border0_image = create_surface(UI_border0_image_size, color=UI_border_color)
+UI_border0_image_bottomleft = (0, height)
+
+UI_border1_image_size = (width//3 - 20, 130)
+UI_border1_image = create_surface(
+    UI_border1_image_size, color=UI_border_color
+)
+w = width//2 - 10 * (UI_element_image_size[0] + 1)//2 - 5
+UI_border1_image_bottomleft = (w, height)
+# endregion UIBorder settings

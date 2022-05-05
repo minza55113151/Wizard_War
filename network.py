@@ -67,6 +67,7 @@ class Network:
             self.client_sending_data["pos"] = [*self.pos]
         self.client_sending_data["id"] = self.id
         self.client_sending_data["speed"] = 0
+        self.client_sending_data["angle"] = 0
         self.client_sending_data["event"] = {
             "bullets": [],
             "target_pos": []
@@ -89,14 +90,16 @@ class Network:
                 player_client_data[player_id]["id"] = player["id"]
                 player_client_data[player_id]["pos"] = player["pos"]
                 player_client_data[player_id]["speed"] = player["speed"]
+                player_client_data[player_id]["angle"] = player["angle"]
                 player_client_data[player_id]["event"] = player["event"]
             # create new player
             else:
                 player_client_data[player_id] = {
                     "player": None,
                     "id": player["id"],
-                    "speed": player["speed"],
                     "pos": player["pos"],
+                    "speed": player["speed"],
+                    "angle": player["angle"],
                     "event": player["event"]
                 }
 
@@ -105,4 +108,6 @@ class Network:
 # 2.update_client_data
 # 3.update_client_data
 # 4.update_stc
-# 5.interact point
+# 5.server
+# 6.server
+# 7.interact point
