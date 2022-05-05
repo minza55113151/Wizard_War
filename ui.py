@@ -160,10 +160,28 @@ class UISkill(pygame.sprite.Sprite):
         self.animate()
 
 
+class UIBorder(pygame.sprite.Sprite):
+    def __init__(self, group, id):
+        super().__init__(group)
+        if id == "0":
+            self.image = create_surface((width, 50), color=(37, 25, 22))
+            self.rect = self.image.get_rect(bottomleft=(0, height))
+        if id == "1":
+            w = width//2 - 10 * (UI_element_image_size[0] + 1)//2 - 5
+            self.image = create_surface(
+                (width//3 - 20, 130), color=(37, 25, 22)
+            )
+            self.rect = self.image.get_rect(bottomleft=(w, height))
+
+    def update(self):
+        pass
+
+
 class UIGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
         self.screen = pygame.display.get_surface()
+        self.create_border()
         self.create_element()
         self.create_skill()
 
@@ -188,6 +206,10 @@ class UIGroup(pygame.sprite.Group):
         for i in range(4):
             x = width//2 + 50 + stepx * i
             UISkill(self, (x, y), skills[i], keys[i])
+
+    def create_border(self):
+        UIBorder(self, "0")
+        UIBorder(self, "1")
 
     def draw(self):
         for sprite in self.sprites():
