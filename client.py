@@ -45,6 +45,8 @@ from ui import UIGroup
 # refactor update_stc, other player slow walk
 # refactor camera follow by mouse
 # connect everything together
+# ping
+# mp displayer
 
 
 class Game:

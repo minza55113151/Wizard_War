@@ -99,31 +99,38 @@ class UIElement(pygame.sprite.Sprite):
 class UISkill(pygame.sprite.Sprite):
     def __init__(self, group, pos, skill, key):
         super().__init__(group)
-        self.img1 = create_surface(
-            UI_element_image_size, (0, 0, 0), (0, 0, 0)
-        )
-        self.img2 = create_surface(
-            UI_element_image_size, (0, 0, 0), (0, 0, 0)
-        )
+        self.key = key
+        self.key_img = UI_skill_key_images[key]
+        if skill == "running":
+            self.img1 = UI_running_images[0]
+            self.img2 = UI_running_images[1]
+            self.img3 = UI_running_images[3]
+            self.img4 = UI_running_images[2]
+        if skill == "revive":
+            self.img1 = UI_revive_images[0]
+            self.img2 = UI_revive_images[1]
+            self.img3 = UI_revive_images[3]
+            self.img4 = UI_revive_images[2]
+        if skill == "reaper":
+            self.img1 = UI_reaper_images[0]
+            self.img2 = UI_reaper_images[1]
+            self.img3 = UI_reaper_images[3]
+            self.img4 = UI_reaper_images[2]
+        if skill == "meteor":
+            self.img1 = UI_meteor_images[0]
+            self.img2 = UI_meteor_images[1]
+            self.img3 = UI_meteor_images[3]
+            self.img4 = UI_meteor_images[2]
+        self.img1.blit(self.key_img, (0, 0))
+        self.img2.blit(self.key_img, (0, 0))
+        self.img3.blit(self.key_img, (0, 0))
         self.image = self.img1
         self.rect = self.image.get_rect(topleft=pos)
-        self.key = key
         self.hovered = False
         self.pressed = False
-        if skill == "running":
-            pass
-        if skill == "revive":
-            pass
-        if skill == "reaper":
-            pass
-        if skill == "meteor":
-            pass
 
     def collide_mouse(self):
-        x1, y1 = pygame.mouse.get_pos()
-        x2, y2 = self.rect.center
-        distance = math.hypot(x1 - x2, y1 - y2)
-        if distance <= self.radius:
+        if self.rect.collidepoint(pygame.mouse.get_pos()):
             return True
         return False
 
@@ -133,14 +140,17 @@ class UISkill(pygame.sprite.Sprite):
 
     def press(self):
         keys = pygame.key.get_pressed()
-        if keys[self.key]:
+        if keys[self.key] or (pygame.mouse.get_pressed()[0] and self.collide_mouse()):
             self.pressed = True
 
     def animate(self):
-        if self.hovered or self.pressed:
+        if self.pressed:
+            self.image = self.img3
+        elif self.hovered:
             self.image = self.img2
         else:
             self.image = self.img1
+        self.rect = self.image.get_rect(center=self.rect.center)
         self.hovered = False
         self.pressed = False
 
@@ -155,9 +165,10 @@ class UIGroup(pygame.sprite.Group):
         super().__init__()
         self.screen = pygame.display.get_surface()
         self.create_element()
+        self.create_skill()
 
     def create_element(self):
-        order = UI_element_order
+        elements = UI_element_order
         keys = UI_element_keys
         k = 0
         stepx = UI_element_image_size[0] + 1
@@ -165,10 +176,18 @@ class UIGroup(pygame.sprite.Group):
         for i in range(2):
             for j in range(4):
                 x = width//2 - (10 - i) * stepx//2 + j * stepx
-                y = height - 2 * stepy + i * stepy
-                UIElement(self, (x, y), order[k], keys[k])
-                print(x, y, order[k])
+                y = int(height - 2.5 * stepy + i * stepy)
+                UIElement(self, (x, y), elements[k], keys[k])
                 k += 1
+
+    def create_skill(self):
+        skills = UI_skill_order
+        keys = UI_skill_keys
+        stepx = UI_skill_image_size[0] + 1
+        y = height - UI_skill_image_size[1] - 50
+        for i in range(4):
+            x = width//2 + 50 + stepx * i
+            UISkill(self, (x, y), skills[i], keys[i])
 
     def draw(self):
         for sprite in self.sprites():

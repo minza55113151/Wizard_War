@@ -94,6 +94,7 @@ UI_element_image_scaled_size = (
     int(UI_element_image_size[0]*1.2),
     int(UI_element_image_size[1]*1.2)
 )
+
 UI_element_key_bg_color = (255, 255, 255)
 UI_element_key_bd_color = (1, 1, 1)
 UI_element_key_image_size = (20, 20)
@@ -201,12 +202,66 @@ UI_fire_image_3 = pygame.transform.scale(
 )
 # endregion UI element settings
 # region UISkill settings
+UI_skill_order = [
+    "running", "revive", "reaper", "meteor"
+]
+UI_skill_keys = [
+    pygame.K_1,
+    pygame.K_2,
+    pygame.K_3,
+    pygame.K_4,
+]
 UI_skill_image_path = "assets/UI/skill/"
-UI_skill_image_size = (150, 150)
-
+UI_skill_image_size = (75, 75)
+UI_element_image_scaled_size = (
+    int(UI_skill_image_size[0]*1.2),
+    int(UI_skill_image_size[1]*1.2)
+)
+UI_skill_key_bg_color = (255, 255, 255)
+UI_skill_key_bd_color = (1, 1, 1)
+UI_skill_key_image_size = (20, 20)
+UI_skill_key_image_center = (
+    UI_skill_key_image_size[0]//2,
+    UI_skill_key_image_size[1]//2
+)
+UI_skill_key_image_r = 8
+UI_skill_key_image_R = 10
+UI_skill_key_image_font_size = 20
+UI_skill_key_image_font_name = None
+UI_skill_key_image_text_color = (1, 1, 1)
+UI_skill_key_images = create_key_img(
+    keys=UI_skill_keys,
+    img_size=UI_skill_key_image_size,
+    bg_color=UI_skill_key_bg_color,
+    bd_color=UI_skill_key_bd_color,
+    center=UI_skill_key_image_center,
+    r=UI_skill_key_image_r,
+    R=UI_skill_key_image_R,
+    font_size=UI_skill_key_image_font_size,
+    font_name=UI_skill_key_image_font_name,
+    text_color=UI_skill_key_image_text_color
+)
 # 1.running
 UI_running_image_path = "assets/UI/skill/running/"
-UI_running_images = load_ani(UI_running_image_path)
+UI_running_images = load_ani(UI_running_image_path, size=UI_skill_image_size)
+UI_running_images.append(pygame.transform.scale(
+    UI_running_images[1], UI_element_image_scaled_size
+))
 # 2.revive
+UI_revive_image_path = "assets/UI/skill/revive/"
+UI_revive_images = load_ani(UI_revive_image_path, size=UI_skill_image_size)
+UI_revive_images.append(pygame.transform.scale(
+    UI_revive_images[1], UI_element_image_scaled_size
+))
 # 3.reaper
+UI_reaper_image_path = "assets/UI/skill/reaper/"
+UI_reaper_images = load_ani(UI_reaper_image_path, size=UI_skill_image_size)
+UI_reaper_images.append(pygame.transform.scale(
+    UI_reaper_images[1], UI_element_image_scaled_size
+))
 # 4.meteor
+UI_meteor_image_path = "assets/UI/skill/meteor/"
+UI_meteor_images = load_ani(UI_meteor_image_path, size=UI_skill_image_size)
+UI_meteor_images.append(pygame.transform.scale(
+    UI_meteor_images[1], UI_element_image_scaled_size
+))
