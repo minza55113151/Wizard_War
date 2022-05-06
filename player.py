@@ -17,11 +17,16 @@ class Player(pygame.sprite.Sprite):
         self.hitbox = self.rect.inflate(*player_hitbox_size_dif)
         self.name = name
         self.control = control
-        self.target_pos = list(pos)
+        self.target_pos = pos
         self.normal_speed = player_normal_speed
         self.slow_speed = player_slow_speed
         self.speed = self.normal_speed
         self.rotate_speed = player_rotation_speed
+        self.max_hp = player_max_hp
+        self.hp = self.max_hp
+        self.max_mp = player_max_mp
+        self.mp = self.max_mp
+
         self.move_direction = pygame.math.Vector2()
         self.face_direction = pygame.math.Vector2()
         self.pcmc_vec = pygame.math.Vector2()
@@ -36,13 +41,7 @@ class Player(pygame.sprite.Sprite):
 
     def init_player_image(self, pos, skin, name):
         # setup original image
-        if skin == "1":
-            self.origin_images = player_images1
-        if skin == "2":
-            self.origin_images = player_images2
-        if skin == "3":
-            self.origin_images = player_images3
-
+        self.origin_images = player_images[int(skin)-1]
         # setup text
         # draw_text_to_surface(
         #     surface=self.origin_image,

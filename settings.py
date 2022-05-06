@@ -27,15 +27,10 @@ player_hitbox_size_dif = (
     player_hitbox_size[0] - player_image_size[0],
     player_hitbox_size[1] - player_image_size[1]
 )
-player_image1_path = "assets/player/1.png"
-player_image1 = load_img(player_image1_path, size=player_image_size)
-player_images1 = create_360(player_image1)
-player_image2_path = "assets/player/1.png"
-player_image2 = load_img(player_image2_path, size=player_image_size)
-player_images2 = create_360(player_image2)
-player_image3_path = "assets/player/1.png"
-player_image3 = load_img(player_image3_path, size=player_image_size)
-player_images3 = create_360(player_image3)
+player_images_path = "assets/player/"
+player_images = load_ani(player_images_path)
+for i in range(len(player_images)):
+    player_images[i] = create_360(player_images[i])
 
 player_image_path_green = "assets/green.png"
 player_image_green = load_img(

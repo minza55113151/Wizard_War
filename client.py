@@ -7,6 +7,7 @@ from network import Network
 from playergroup import PlayerGroup
 from projectile import Projectile
 from ui import UIGroup
+import random
 
 # done
 # right click to walk
@@ -17,6 +18,8 @@ from ui import UIGroup
 # offset mouse target point
 # walk point image
 # set speed other player from server data
+# player hitbox
+# projectile author [pass author in bullets and pass in projectiles]
 
 # done?
 # interpolation
@@ -24,7 +27,6 @@ from ui import UIGroup
 
 # to do
 # map
-# projectile author [pass author in bullets and pass in projectiles]
 # select server
 
 # select elements qwer asdf 8 elements
@@ -83,7 +85,7 @@ class Game:
         # setup player ----------------------------------------------------------
         self.player = self.player_sprites.create_player(
             pos=self.network.pos,
-            skin="1",
+            skin=random.randint(1, 19),
             name="player " + self.id,
             control=True,
             client_sending_data=self.client_sending_data,
