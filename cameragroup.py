@@ -186,25 +186,30 @@ class CameraGroup(pygame.sprite.Group):
         # all sprites
         sprites = self.sprites()
         for sprite in sprites:
-            if sprite == self.player:
-                continue
             if sprite in self.all_sprites_groups["circle"]:
                 continue
             if sprite in self.all_sprites_groups["UI"]:
                 continue
-
+            if sprite == self.player:
+                continue
             offset_pos = sprite.rect.topleft - self.offset
             if offset_pos.x < -100 or offset_pos.y < -100 or offset_pos.x > self.width + 100 or offset_pos.y > self.height + 100:
                 continue
             self.surface.blit(sprite.image, offset_pos)
+            if sprite in self.all_sprites_groups["player"]:
+                sprite.draw_hitbox(self.surface, self.offset)
+                sprite.draw_hp(self.surface, self.offset)
 
         for sprite in self.all_sprites_groups["circle"]:
             self.surface.blit(sprite.image, sprite.rect)
-        # move target point
+        # player move target point
         self.player.draw_move_target(self.surface, self.offset)
-        # player
+        # player sprite
         offset_pos = self.player.rect.topleft - self.offset
         self.surface.blit(self.player.image, offset_pos)
-        self.player.draw_hitbox(self.offset)
+        # player hitbox
+        self.player.draw_hitbox(self.surface, self.offset)
+        # player hp
+        self.player.draw_hp(self.surface, self.offset)
         # self.post_zoom()
         pass

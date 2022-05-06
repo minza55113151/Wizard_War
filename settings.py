@@ -1,3 +1,4 @@
+from ctypes import create_string_buffer
 import pygame
 from utils.utils import *
 
@@ -21,17 +22,11 @@ cursor_image_path = "assets/mouse/cursor/cursor.png"
 cursor_image = load_img(cursor_image_path)
 # endregion cursor settings
 # region player settings
-player_hitbox_size = (50, 50)
 player_image_size = (75, 75)
-player_hitbox_size_dif = (
-    player_hitbox_size[0] - player_image_size[0],
-    player_hitbox_size[1] - player_image_size[1]
-)
 player_images_path = "assets/player/"
 player_images = load_ani(player_images_path)
 for i in range(len(player_images)):
     player_images[i] = create_360(player_images[i])
-
 player_image_path_green = "assets/green.png"
 player_image_green = load_img(
     player_image_path_green, gb_colorkey, player_image_size
@@ -40,6 +35,13 @@ player_image_path_red = "assets/red.png"
 player_image_red = load_img(
     player_image_path_red, gb_colorkey, player_image_size
 )
+
+player_hitbox_size = (50, 50)
+player_hitbox_size_dif = (
+    player_hitbox_size[0] - player_image_size[0],
+    player_hitbox_size[1] - player_image_size[1]
+)
+player_hitbox_image = create_surface(player_hitbox_size, (0, 255, 0))
 
 player_move_target_size = (25, 15)
 player_move_target_image_path = "assets/mouse/pos"
@@ -54,6 +56,15 @@ player_slow_speed = 3
 player_rotation_speed = 5
 player_max_hp = 100
 player_max_mp = 100
+
+player_hp_border_offset = (2, 2)
+player_hp_image_size = (player_image_size[0]-10, 5)
+player_hp_border_image_size = (
+    player_hp_image_size[0] + player_hp_border_offset[0] * 2,
+    player_hp_image_size[1] + player_hp_border_offset[1] * 2
+)
+
+player_hp_image = create_surface(player_hp_image_size, (0, 0, 0))
 # endregion player settings
 # region projectile settings
 """

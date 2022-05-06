@@ -1,3 +1,4 @@
+import random
 import pygame
 from projectile import Projectile
 from settings import *
@@ -13,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.init_player_image(pos, skin, name)
         self.init_move_target_image()
 
-        self.hitbox_image = create_surface(player_hitbox_size, (0, 255, 0))
+        self.hitbox_image = player_hitbox_image
         self.hitbox = self.rect.inflate(*player_hitbox_size_dif)
         self.name = name
         self.control = control
@@ -31,10 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.face_direction = pygame.math.Vector2()
         self.pcmc_vec = pygame.math.Vector2()
         self.is_shoot = False
-
-    def draw_hitbox(self, offset=pygame.math.Vector2(0, 0)):
-        offset_pos = self.hitbox.topleft - offset
-        self.screen.blit(self.hitbox_image, offset_pos)
+        self.angle = 0
 
     def set_pcmc_vec(self, pcmc_vec):
         self.pcmc_vec = pcmc_vec
@@ -59,14 +57,16 @@ class Player(pygame.sprite.Sprite):
         self.image = self.origin_images[0]
         self.rect = self.image.get_rect(center=pos)
 
-        self.angle = 0
-
     def init_move_target_image(self):
         self.move_target_images = player_move_target_images
         self.move_target_image_len = len(self.move_target_images)
         self.move_target_image_frame = 0
         self.move_target_image = self.move_target_images[self.move_target_image_frame]
         self.move_target_rect = self.move_target_image.get_rect()
+
+    def draw_hitbox(self, screen, offset=pygame.math.Vector2(0, 0)):
+        offset_pos = self.hitbox.topleft - offset
+        screen.blit(self.hitbox_image, offset_pos)
 
     def draw_move_target(self, screen, offset=pygame.math.Vector2(0, 0)):
         if self.move_direction.magnitude() != 0:
@@ -75,6 +75,28 @@ class Player(pygame.sprite.Sprite):
             )
             offset_pos = self.move_target_rect.topleft - offset
             screen.blit(self.move_target_image, offset_pos)
+
+    def draw_hp(self, screen, offset=pygame.math.Vector2(0, 0)):
+        self.hp_border_image = create_surface(
+            player_hp_border_image_size, (30, 20, 20)
+        )
+        self.hp_image_size = (
+            (self.hp/self.max_hp) * player_hp_image_size[0],
+            player_hp_image_size[1]
+        )
+        self.hp_image = create_surface(self.hp_image_size, (0, 120, 0))
+        self.hp_border_image.blit(self.hp_image, player_hp_border_offset)
+        self.hp_image = self.hp_border_image
+        self.hp_rect = self.hp_image.get_rect(
+            midtop=(self.rect.centerx,
+                    self.rect.centery + player_image_size[1]//2 +
+                    player_hp_image_size[1]
+                    )
+        )
+        offset_pos = self.hp_rect.topleft - offset
+        screen.blit(self.hp_image, offset_pos)
+
+        self.hp = random.randint(0, self.max_hp)
 
     def animation(self):
         # move_target
