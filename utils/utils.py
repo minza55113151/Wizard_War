@@ -93,3 +93,10 @@ def get_dt(fps):
     dt = (t - lt) * fps / 1000
     lt = t
     return dt
+
+
+def create_text_surface(size, bg_color, font, text, text_color, **kwargs):
+    surface = create_surface(size, bg_color)
+    draw_text_to_surface(surface, font, text, text_color)
+    rect = surface.get_rect(**kwargs)
+    return surface, rect

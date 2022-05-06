@@ -6,8 +6,8 @@ from utils.utils import *
 fps = 60
 width = 800
 height = 800
-# width = 1920
-# height = 1080
+width = 1920
+height = 1080
 # make it can load image
 pygame.display.set_mode((width, height))
 # endregion screen settings
@@ -25,8 +25,9 @@ cursor_image = load_img(cursor_image_path)
 player_image_size = (75, 75)
 player_images_path = "assets/player/"
 player_images = load_ani(player_images_path)
+player_images_set = []
 for i in range(len(player_images)):
-    player_images[i] = create_360(player_images[i])
+    player_images_set.append(create_360(player_images[i]))
 player_image_path_green = "assets/green.png"
 player_image_green = load_img(
     player_image_path_green, gb_colorkey, player_image_size

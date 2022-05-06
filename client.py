@@ -7,6 +7,7 @@ from network import Network
 from playergroup import PlayerGroup
 from projectile import Projectile
 from ui import UIGroup
+from menu import Menu
 import random
 
 # done
@@ -50,9 +51,13 @@ import random
 # ping
 # mp displayer
 
+# save name
+# Menu
+# name display
+
 
 class Game:
-    def __init__(self):
+    def __init__(self, data):
         # setup game ------------------------------------------------------------
         pygame.init()
         self.screen = pygame.display.set_mode(
@@ -63,6 +68,7 @@ class Game:
         pygame.mouse.set_visible(False)
         self.clock = pygame.time.Clock()
         self.running = True
+        self.data = data
         # setup sprites ----------------------------------------------------------
         self.tile_sprites = TileGroup()
         self.tile_sprites.create_random_tile(2000)
@@ -77,16 +83,18 @@ class Game:
             "player": self.player_sprites,
             "UI": self.UI_sprites
         }
+        # setup player data -----------------------------------------------------
+        self.skin = self.data["skin"]
         # setup network ---------------------------------------------------------
-        self.client_sending_data = {}
+        self.client_sending_data = {"skin": self.skin}
         self.client_data = {"player": {}}
         self.network = Network(self.client_sending_data)
         self.id = self.network.id
         # setup player ----------------------------------------------------------
         self.player = self.player_sprites.create_player(
             pos=self.network.pos,
-            skin=random.randint(1, 19),
-            name="player " + self.id,
+            skin=self.skin,
+            name=self.data["name"],
             control=True,
             client_sending_data=self.client_sending_data,
             all_sprites_group=self.all_sprites_group
@@ -101,7 +109,7 @@ class Game:
             if other_player["player"] == None:
                 other_player["player"] = self.player_sprites.create_player(
                     pos=other_player["pos"],
-                    skin="2",
+                    skin=other_player["skin"],
                     name="player " + player_id,
                     all_sprites_group=self.all_sprites_group
                 )
@@ -117,8 +125,9 @@ class Game:
                         face_direction,
                         all_sprites_group=self.all_sprites_group
                     )
-            if other_player["event"]["target_pos"]:
-                other_player["player"].target_pos = other_player["event"]["target_pos"]
+            other_player["player"].target_pos = other_player["target_pos"]
+            other_player["player"].hp = other_player["hp"]
+            other_player["player"].mp = other_player["mp"]
             other_player["player"].speed = other_player["speed"]
             other_player["player"].angle = other_player["angle"]
 
@@ -174,5 +183,12 @@ class Game:
             debug(text, self.debug_count)
 
 
-game = Game()
-game.run()
+# game = Game()
+# game.run()
+
+run = True
+data = {"skin": 1, "name": ""}
+while run:
+    menu = Menu(data)
+    game = Game(data)
+    game.run()

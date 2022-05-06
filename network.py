@@ -61,16 +61,19 @@ class Network:
         self.server_data = self.send(self.client_sending_data)
 
     def set_client_sending_data(self, player=None):
+        self.client_sending_data["id"] = self.id
         if player:
             self.client_sending_data["pos"] = [*player.rect.center]
+            self.client_sending_data["target_pos"] = [*player.rect.center]
         else:
             self.client_sending_data["pos"] = [*self.pos]
-        self.client_sending_data["id"] = self.id
+            self.client_sending_data["target_pos"] = [*self.pos]
+        self.client_sending_data["hp"] = 0
+        self.client_sending_data["mp"] = 0
         self.client_sending_data["speed"] = 0
         self.client_sending_data["angle"] = 0
         self.client_sending_data["event"] = {
-            "bullets": [],
-            "target_pos": []
+            "bullets": []
         }
 
     def valid_player_client_data(self, client_data):
@@ -88,7 +91,11 @@ class Network:
             # update data
             if player_id in player_client_data:
                 player_client_data[player_id]["id"] = player["id"]
+                player_client_data[player_id]["skin"] = player["skin"]
                 player_client_data[player_id]["pos"] = player["pos"]
+                player_client_data[player_id]["target_pos"] = player["target_pos"]
+                player_client_data[player_id]["hp"] = player["hp"]
+                player_client_data[player_id]["mp"] = player["mp"]
                 player_client_data[player_id]["speed"] = player["speed"]
                 player_client_data[player_id]["angle"] = player["angle"]
                 player_client_data[player_id]["event"] = player["event"]
@@ -97,7 +104,11 @@ class Network:
                 player_client_data[player_id] = {
                     "player": None,
                     "id": player["id"],
+                    "skin": player["skin"],
                     "pos": player["pos"],
+                    "target_pos": player["target_pos"],
+                    "hp": player["hp"],
+                    "mp": player["mp"],
                     "speed": player["speed"],
                     "angle": player["angle"],
                     "event": player["event"]
