@@ -41,7 +41,7 @@ class Projectile(pygame.sprite.Sprite):
         self.health -= 1
 
     def iscollide(self):
-        sprite = pygame.sprite.spritecollideany(self, self.player_sprites)
+        sprite = self.player_sprites.collide_player(self)
         if sprite != None and sprite != self.author:
             print(sprite.name)
 

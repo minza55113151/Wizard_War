@@ -13,3 +13,9 @@ class PlayerGroup(pygame.sprite.Group):
 
     def create_player(self, pos, skin, name, control=False, **kwargs):
         return Player(pos, skin, name, control, **kwargs)
+
+    def collide_player(self, sprite):
+        for player in self.sprites():
+            if player.hitbox.colliderect(sprite.rect):
+                return player
+        return None
