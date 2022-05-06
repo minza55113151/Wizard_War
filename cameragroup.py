@@ -205,5 +205,6 @@ class CameraGroup(pygame.sprite.Group):
         # player
         offset_pos = self.player.rect.topleft - self.offset
         self.surface.blit(self.player.image, offset_pos)
+        self.player.draw_hitbox(self.offset)
         # self.post_zoom()
         pass

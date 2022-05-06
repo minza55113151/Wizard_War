@@ -110,6 +110,7 @@ class Game:
                 for bullet in bullets:
                     face_direction = pygame.math.Vector2(*bullet["direction"])
                     Projectile(
+                        other_player["player"],
                         bullet["pos"],
                         face_direction,
                         all_sprites_group=self.all_sprites_group

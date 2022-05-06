@@ -13,6 +13,8 @@ class Player(pygame.sprite.Sprite):
         self.init_player_image(pos, skin, name)
         self.init_move_target_image()
 
+        self.hitbox_image = create_surface(player_hitbox_size, (0, 255, 0))
+        self.hitbox = self.rect.inflate(*player_hitbox_size_dif)
         self.name = name
         self.control = control
         self.target_pos = list(pos)
@@ -24,6 +26,10 @@ class Player(pygame.sprite.Sprite):
         self.face_direction = pygame.math.Vector2()
         self.pcmc_vec = pygame.math.Vector2()
         self.is_shoot = False
+
+    def draw_hitbox(self, offset=pygame.math.Vector2(0, 0)):
+        offset_pos = self.hitbox.topleft - offset
+        self.screen.blit(self.hitbox_image, offset_pos)
 
     def set_pcmc_vec(self, pcmc_vec):
         self.pcmc_vec = pcmc_vec
@@ -135,6 +141,7 @@ class Player(pygame.sprite.Sprite):
                 }
                 self.client_sending_data["event"]["bullets"].append(bullet)
                 Projectile(
+                    self,
                     self.rect.center,
                     self.bullet_direction,
                     all_sprites_group=self.all_sprites_group
@@ -151,6 +158,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.move_direction.normalize_ip()
                 self.rect.center += self.move_direction * self.speed * dt
+        self.hitbox.center = self.rect.center
 
     def set_speed(self):
         if self.is_shoot:

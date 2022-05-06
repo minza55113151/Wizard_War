@@ -5,8 +5,8 @@ from utils.utils import *
 fps = 60
 width = 800
 height = 800
-width = 1920
-height = 1080
+# width = 1920
+# height = 1080
 # make it can load image
 pygame.display.set_mode((width, height))
 # endregion screen settings
@@ -23,6 +23,10 @@ cursor_image = load_img(cursor_image_path)
 # region player settings
 player_hitbox_size = (50, 50)
 player_image_size = (75, 75)
+player_hitbox_size_dif = (
+    player_hitbox_size[0] - player_image_size[0],
+    player_hitbox_size[1] - player_image_size[1]
+)
 player_image1_path = "assets/player/1.png"
 player_image1 = load_img(player_image1_path, size=player_image_size)
 player_images1 = create_360(player_image1)

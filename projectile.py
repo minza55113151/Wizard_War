@@ -3,9 +3,11 @@ from settings import *
 
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, pos, direction, **kwargs):
+    def __init__(self, author, pos, direction, **kwargs):
         self.all_sprites_group = kwargs["all_sprites_group"]
+        self.player_sprites = self.all_sprites_group["player"]
         super().__init__(self.all_sprites_group["projectile"])
+        self.author = author
         self.direction = direction
         self.speed = projectile_speed
         # self.rotate_speed = projectile_rotation_speed
@@ -38,19 +40,12 @@ class Projectile(pygame.sprite.Sprite):
             self.kill()
         self.health -= 1
 
-    def bounce(self):
-        if self.rect.x < 0 or self.rect.x > width:
-            self.direction.x *= -1
-        if self.rect.y < 0 or self.rect.y > height:
-            self.direction.y *= -1
-
-    # def rotate(self):
-    #     self.image = pygame.transform.rotate(self.origin_image, self.angle)
-    #     self.rect = self.image.get_rect(center=self.rect.center)
-    #     self.angle += self.max_health - self.health
+    def iscollide(self):
+        sprite = pygame.sprite.spritecollideany(self, self.player_sprites)
+        if sprite != None and sprite != self.author:
+            print(sprite.name)
 
     def update(self, dt, *args, **kwargs):
         self.move(dt)
-        # self.bounce()
-        # self.rotate()
+        self.iscollide()
         self.life()
