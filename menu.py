@@ -136,7 +136,7 @@ class Menu:
             center=(width//2, height//2 + self.side*5)
         )
         self.profile_input_image2 = create_surface(
-            (self.side*5, self.side*1), (200, 200, 200)
+            (self.side*5, self.side*1), (90, 90, 90)
         )
         self.profile_input_rect2 = self.profile_input_image2.get_rect(
             center=(width//2, height//2 + self.side*5)
