@@ -170,8 +170,7 @@ class Menu:
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
-                    run = False
+                    exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         run = False
@@ -247,8 +246,7 @@ class Menu:
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
-                    run = False
+                    exit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     run = False
 
@@ -261,9 +259,8 @@ class Menu:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    exit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    self.running = False
                     exit()
 
             self.screen.fill(background_color)

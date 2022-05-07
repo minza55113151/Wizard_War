@@ -1,6 +1,7 @@
 import socket
 import pickle
 from threading import Thread
+import time
 
 ips = {
     "Minzung": "25.31.231.0",
@@ -25,6 +26,9 @@ class Network:
         self.set_client_sending_data()
         # setup thread ----------------------------------------------------------
         self.thread = Thread(target=self.get_server_data)
+
+        self.t1 = time.time()
+        self.t2 = time.time()
 
         # self.missing_frame = 0
         # self.get_server_data_time = 0
@@ -51,6 +55,10 @@ class Network:
         if not self.thread.is_alive():
             self.thread = Thread(target=self._get_server_data)
             self.thread.start()
+            self.t2 = time.time()
+            print(f"ping {(self.t2 - self.t1)*1000:.0f} ms")
+            self.t1 = self.t2
+
         #     print(self.missing_frame)
         #     self.get_server_data_time = 0
         #     self.missing_frame = 0

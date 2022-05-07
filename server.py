@@ -1,6 +1,7 @@
 import socket
 from _thread import start_new_thread
 import pickle
+import time
 # setup server data and environment
 ip = "25.31.231.0"
 port = 3000
@@ -56,12 +57,15 @@ def threaded_client(con):  # threaded client function to handle each client conn
     server_data["player"][player_ID] = client_data
     print(f"[Sending][start] p{player_ID}: {server_data}")
     send_data(con, server_data)
-
+    t1 = time.time()
     while True:
         try:
+
             # recieve data from client then update data to server_data
             client_data = recv_data(con)
-            print(f"[Recieve] p{player_ID}: {client_data}")
+            t2 = time.time()
+            print(f"p{player_ID} ping {(t2-t1)*1000:.0f} ms")
+            # print(f"[Recieve] p{player_ID}: {client_data}")
             server_data["player"][player_ID]["skin"] = client_data["skin"]
             server_data["player"][player_ID]["name"] = client_data["name"]
             server_data["player"][player_ID]["pos"] = client_data["pos"]
@@ -71,8 +75,9 @@ def threaded_client(con):  # threaded client function to handle each client conn
             server_data["player"][player_ID]["speed"] = client_data["speed"]
             server_data["player"][player_ID]["angle"] = client_data["angle"]
             server_data["player"][player_ID]["event"] = client_data["event"]
-            print(f"[Sending] p{player_ID}: {server_data}")
+            # print(f"[Sending] p{player_ID}: {server_data}")
             send_data(con, server_data)
+            t1 = time.time()
 
         except Exception as e:
             print(f"{player_ID} Lost connection [{e}]")

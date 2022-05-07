@@ -28,6 +28,7 @@ import random
 # refactor camera follow by mouse
 # refactor update_stc, other player slow walk
 # init data with server
+# name display
 
 # done?
 # interpolation
@@ -51,7 +52,7 @@ import random
 
 # mp displayer
 # save name
-# name display
+# read write data
 # shooting check
 # server validation data
 # element selected display
@@ -63,7 +64,7 @@ import random
 # menu font size
 # menu setting
 # menu margin
-# read write data
+# text input active color
 # refactor optimize
 
 
@@ -156,7 +157,11 @@ class Game:
 
     def event_handler(self):
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            if event.type == pygame.QUIT:
+                self.running = False
+                self.network.disconnect()
+                exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.running = False
                 self.network.disconnect()
                 # pygame.quit()
