@@ -114,6 +114,8 @@ class Game:
         )
         # setup layer -----------------------------------------------------------
         self.layer = Layer(self.all_sprites_group)
+        # setup other -----------------------------------------------------------
+        self.key = None
 
     def update_stc(self):
         # update data from server to client
@@ -167,6 +169,8 @@ class Game:
                 # pygame.quit()
             if event.type == pygame.MOUSEWHEEL:
                 self.layer.camera.zoom_scale += event.y * 0.03
+            if event.type == pygame.KEYDOWN:
+                self.key = event.unicode
 
     def run(self):
         while self.running:
@@ -195,7 +199,8 @@ class Game:
             f"face_direction: {self.player.face_direction.x:.2f},{self.player.face_direction.y:.2f}",
             f"face_angle: {self.player.face_direction.angle_to(pygame.math.Vector2(1, 0)):.2f}",
             f"players: {len(self.player_sprites.sprites())}",
-            f"projectiles: {len(self.projectile_sprites.sprites())}"
+            f"projectiles: {len(self.projectile_sprites.sprites())}",
+            f"key: {self.key}"
         ]
         for text in debugs:
             debug(text, self.debug_count)

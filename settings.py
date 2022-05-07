@@ -1,7 +1,9 @@
-from ctypes import create_string_buffer
 import pygame
 from utils.utils import *
 
+# region game settings
+draw_hitbox = False
+# endregion game settings
 # region screen settings
 fps = 60
 width = 800

@@ -197,7 +197,8 @@ class CameraGroup(pygame.sprite.Group):
                 continue
             self.surface.blit(sprite.image, offset_pos)
             if sprite in self.all_sprites_groups["player"]:
-                sprite.draw_hitbox(self.surface, self.offset)
+                if draw_hitbox:
+                    sprite.draw_hitbox(self.surface, self.offset)
                 sprite.draw_hp(self.surface, self.offset)
                 sprite.draw_name(self.surface, self.offset)
 
@@ -209,7 +210,8 @@ class CameraGroup(pygame.sprite.Group):
         offset_pos = self.player.rect.topleft - self.offset
         self.surface.blit(self.player.image, offset_pos)
         # player hitbox
-        self.player.draw_hitbox(self.surface, self.offset)
+        if draw_hitbox:
+            self.player.draw_hitbox(self.surface, self.offset)
         # player hp
         self.player.draw_hp(self.surface, self.offset)
         # playey name
