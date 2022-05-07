@@ -29,6 +29,7 @@ class Network:
 
         self.t1 = time.time()
         self.t2 = time.time()
+        self.ping = 0
 
         # self.missing_frame = 0
         # self.get_server_data_time = 0
@@ -56,7 +57,7 @@ class Network:
             self.thread = Thread(target=self._get_server_data)
             self.thread.start()
             self.t2 = time.time()
-            print(f"ping {(self.t2 - self.t1)*1000:.0f} ms")
+            self.ping = int((self.t2 - self.t1)*1000)
             self.t1 = self.t2
 
         #     print(self.missing_frame)

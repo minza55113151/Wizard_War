@@ -187,6 +187,7 @@ class Game:
         self.debug_count = [0]
         debugs = [
             f"fps: {self.clock.get_fps():.2f}",
+            f"ping {self.network.ping} ms",
             f"pos: {self.player.rect.centerx},{self.player.rect.centery}",
             f"target_pos: {self.player.target_pos[0]},{self.player.target_pos[1]}",
             f"mouse_pos: {pygame.mouse.get_pos()}",
