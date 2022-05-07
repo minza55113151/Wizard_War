@@ -1,1 +1,1 @@
-pygame.mouse.set_visible(False)
+create_player

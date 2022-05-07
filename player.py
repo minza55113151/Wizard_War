@@ -59,6 +59,20 @@ class Player(pygame.sprite.Sprite):
         self.image = self.origin_images[0]
         self.rect = self.image.get_rect(center=pos)
 
+        self.name_image, self.name_rect = create_text_surface(
+            (self.rect.width*2, self.rect.height),
+            (0, 0, 0),
+            create_font(25, "calibri", bold=True),
+            "MinZung",
+            (1, 1, 1),
+            center=(
+                self.rect.centerx,
+                self.rect.centery - player_image_size[1]//2 -
+                player_hp_image_size[1] * 6
+            )
+        )
+        print(self.name_image, self.name_rect)
+
     def init_move_target_image(self):
         self.move_target_images = player_move_target_images
         self.move_target_image_len = len(self.move_target_images)
@@ -90,15 +104,25 @@ class Player(pygame.sprite.Sprite):
         self.hp_border_image.blit(self.hp_image, player_hp_border_offset)
         self.hp_image = self.hp_border_image
         self.hp_rect = self.hp_image.get_rect(
-            midtop=(self.rect.centerx,
-                    self.rect.centery + player_image_size[1]//2 +
-                    player_hp_image_size[1]
-                    )
+            center=(
+                self.rect.centerx,
+                self.rect.centery - player_image_size[1]//2 -
+                player_hp_image_size[1] * 2
+            )
         )
         offset_pos = self.hp_rect.topleft - offset
         screen.blit(self.hp_image, offset_pos)
 
         self.hp = random.randint(0, self.max_hp)
+
+    def draw_name(self, screen, offset=pygame.math.Vector2(0, 0)):
+        self.name_rect.center = (
+            self.rect.centerx,
+            self.rect.centery - player_image_size[1]//2 -
+            player_hp_image_size[1] * 6
+        )
+        offset_pos = self.name_rect.topleft - offset
+        screen.blit(self.name_image, offset_pos)
 
     def animation(self):
         # move_target

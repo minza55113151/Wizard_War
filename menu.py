@@ -27,7 +27,7 @@ class Menu:
     def init_menu(self):
         word = ["Play", "Profile", "Setting", "Exit"]
         self.logo_image, self.logo_rect = create_text_surface(
-            (width, height//2), "black", create_font(self.side * 8),
+            (width, height//2), "black", create_font(self.side * 8, "calibri"),
             "Wizard War", self.text_color,
             center=(
                 width//2,
@@ -287,7 +287,6 @@ class Menu:
                 self.screen.blit(image, rect)
             self.draw_cursor()
             pygame.display.update()
-        print("menu done")
 
 
 if __name__ == "__main__":

@@ -3,10 +3,14 @@ import os
 
 
 pygame.init()
+pygame.font.init()
 
 
-def create_font(font_size=20, font_name=None):
-    font = pygame.font.Font(font_name, font_size)
+def create_font(font_size=20, font_name=None, **kwargs):
+    if font_name:
+        font = pygame.font.SysFont(font_name, font_size, **kwargs)
+    else:
+        font = pygame.font.Font(font_name, font_size)
     return font
 
 

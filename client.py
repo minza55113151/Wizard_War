@@ -21,6 +21,12 @@ import random
 # set speed other player from server data
 # player hitbox
 # projectile author [pass author in bullets and pass in projectiles]
+# ui Ex : hp, mp, exp, level, skill point, skill list
+# elements qwer asdf 8 elements
+# left click shoot
+# right click walk
+# refactor camera follow by mouse
+# refactor update_stc, other player slow walk
 
 # done?
 # interpolation
@@ -30,30 +36,34 @@ import random
 # map
 # select server
 
-# select elements qwer asdf 8 elements
-# ui Ex : hp, mp, exp, level, skill point, skill list
 # element : water, heal, shield, ice, thunder, death, stone, fire
 # skill : fast walk, revive, reaper, metor shower
 
-# left click shoot
 # middle click or space bar use to yourself or in your area
-# right click walk
 
 # element iteration like fire + water
 # health damage stun slow fire ice falling knockback
 # when cast should slow speed and speed rotate face direction
 
-# server validation data
-
-# refactor update_stc, other player slow walk
-# refactor camera follow by mouse
 # connect everything together
 # ping
-# mp displayer
 
+# mp displayer
 # save name
-# Menu
 # name display
+# shooting check
+# server validation data
+# element selected display
+
+# Anti Cheat
+
+# Menu
+# menu button image
+# menu font size
+# menu setting
+# menu margin
+# read write data
+# refactor optimize
 
 
 class Game:
@@ -85,6 +95,7 @@ class Game:
         }
         # setup player data -----------------------------------------------------
         self.skin = self.data["skin"]
+        self.name = self.data["name"]
         # setup network ---------------------------------------------------------
         self.client_sending_data = {"skin": self.skin}
         self.client_data = {"player": {}}
@@ -94,7 +105,7 @@ class Game:
         self.player = self.player_sprites.create_player(
             pos=self.network.pos,
             skin=self.skin,
-            name=self.data["name"],
+            name=self.name,
             control=True,
             client_sending_data=self.client_sending_data,
             all_sprites_group=self.all_sprites_group

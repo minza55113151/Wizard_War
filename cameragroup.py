@@ -211,5 +211,7 @@ class CameraGroup(pygame.sprite.Group):
         self.player.draw_hitbox(self.surface, self.offset)
         # player hp
         self.player.draw_hp(self.surface, self.offset)
+        # playey name
+        self.player.draw_name(self.surface, self.offset)
         # self.post_zoom()
         pass
