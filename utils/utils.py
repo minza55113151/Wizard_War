@@ -1,5 +1,6 @@
 import pygame
 import os
+import json
 
 
 pygame.init()
@@ -28,6 +29,7 @@ def draw_text_to_surface(surface, font, text, text_color="black", bg_color=None,
 
 
 def load_img(path, colorkey=(0, 0, 0), size=None):
+    # print(f"load: {path}")
     img = pygame.image.load(path).convert()
     if size:
         img = pygame.transform.scale(img, size)
@@ -37,7 +39,7 @@ def load_img(path, colorkey=(0, 0, 0), size=None):
 
 def load_ani(path, colorkey=(0, 0, 0), size=None):
     ani = []
-    for filename in os.listdir(path):
+    for filename in sorted(os.listdir(path), key=lambda x: int(x[x.find("(")+1:x.find(")")])):
         img_path = os.path.join(path, filename)
         ani.append(load_img(img_path, colorkey, size))
     return ani
@@ -104,3 +106,25 @@ def create_text_surface(size, bg_color, font, text, text_color, **kwargs):
     draw_text_to_surface(surface, font, text, text_color)
     rect = surface.get_rect(**kwargs)
     return surface, rect
+
+
+def read_json(path):
+    with open(path, "r") as f:
+        return json.load(f)
+
+
+def write_json(path, data):
+    with open(path, "w") as f:
+        json.dump(data, f)
+
+
+def read_client():
+    try:
+        data = read_json("client.json")
+    except FileNotFoundError:
+        data = {"skin": 1, "name": "Wizard"}
+    return data
+
+
+def write_client(data):
+    write_json("client.json", data)

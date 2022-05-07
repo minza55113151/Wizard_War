@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
 
     def init_player_image(self, pos, skin, name):
         # setup original image
-        self.origin_images = player_images_set[int(skin)-1]
+        self.origin_images = player_images_set[skin-1]
         # setup text
         # draw_text_to_surface(
         #     surface=self.origin_image,

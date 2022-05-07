@@ -1,3 +1,4 @@
+import traceback
 import pygame
 from settings import *
 from circle.circlegroup import CircleGroup
@@ -29,6 +30,8 @@ import random
 # refactor update_stc, other player slow walk
 # init data with server
 # name display
+# ping
+# toggle display hitbox
 
 # done?
 # interpolation
@@ -48,7 +51,6 @@ import random
 # when cast should slow speed and speed rotate face direction
 
 # connect everything together
-# ping
 
 # mp displayer
 # save name
@@ -162,11 +164,10 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
                 self.network.disconnect()
-                exit()
+                pygame.quit()
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 self.running = False
                 self.network.disconnect()
-                # pygame.quit()
             if event.type == pygame.MOUSEWHEEL:
                 self.layer.camera.zoom_scale += event.y * 0.03
             if event.type == pygame.KEYDOWN:
@@ -209,9 +210,17 @@ class Game:
 # game = Game()
 # game.run()
 
-run = True
-data = {"skin": 1, "name": ""}
-while run:
-    menu = Menu(data)
-    game = Game(data)
-    game.run()
+
+if __name__ == "__main__":
+    try:
+        data = read_client()
+        run = True
+        while run:
+            menu = Menu(data)
+            game = Game(data)
+            game.run()
+    except Exception as e:
+        traceback.print_exc()
+    write_client(data)
+    print(data)
+    print("Game Saved!")

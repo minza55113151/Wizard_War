@@ -84,8 +84,8 @@ class Menu:
                 self.profile_images[i], (self.side * 4, self.side * 4)
             )
         self.profile_image_len = len(self.profile_images)
-        self.profile_n = int(self.data["skin"])-1
-        self.profile_image = self.profile_images[self.profile_n]
+        self.profile_n = self.data["skin"]
+        self.profile_image = self.profile_images[self.profile_n-1]
         self.profile_rect = self.profile_image.get_rect(
             center=(
                 width//2,
@@ -108,7 +108,7 @@ class Menu:
                     )
                 )
             )
-        self.profile_text = self.profile_texts[self.profile_n]
+        self.profile_text = self.profile_texts[self.profile_n-1]
 
         self.profile_button_size = (self.side*1, self.side*1)
         self.profile_left_button_image = create_surface(
@@ -116,7 +116,7 @@ class Menu:
         )
         self.profile_left_button_rect = self.profile_left_button_image.get_rect(
             center=(
-                width//2 + self.side * 2,
+                width//2 - self.side * 2,
                 height//2 + self.side * 2
             )
         )
@@ -125,14 +125,20 @@ class Menu:
         )
         self.profile_right_button_rect = self.profile_right_button_image.get_rect(
             center=(
-                width//2 - self.side * 2,
+                width//2 + self.side * 2,
                 height//2 + self.side * 2
             )
         )
-        self.profile_input_image = create_surface(
+        self.profile_input_image1 = create_surface(
             (self.side*5, self.side*1), self.bt_color
         )
-        self.profile_input_rect = self.profile_input_image.get_rect(
+        self.profile_input_rect1 = self.profile_input_image1.get_rect(
+            center=(width//2, height//2 + self.side*5)
+        )
+        self.profile_input_image2 = create_surface(
+            (self.side*5, self.side*1), (200, 200, 200)
+        )
+        self.profile_input_rect2 = self.profile_input_image2.get_rect(
             center=(width//2, height//2 + self.side*5)
         )
         self.profile_skin_text_image, self.profile_skin_text_rect = create_text_surface(
@@ -165,35 +171,36 @@ class Menu:
     def profile(self):
         run = True
         name = self.data["name"]
-        skin = self.data["skin"]
         active = False
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    exit()
+                    pygame.quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         run = False
-                        break
                     if active:
                         if event.key == pygame.K_BACKSPACE:
                             name = name[:-1]
                         else:
                             name += event.unicode
+                        self.data["name"] = name
 
             self.screen.fill(background_color)
             mx, my = pygame.mouse.get_pos()
             if self.profile_left_button_rect.collidepoint(mx, my) and pygame.mouse.get_pressed()[0] and not self.mouse_before:
-                self.profile_n = (self.profile_n + 1) % self.profile_image_len
-                self.profile_image = self.profile_images[self.profile_n]
-                self.profile_text = self.profile_texts[self.profile_n]
-            if self.profile_right_button_rect.collidepoint(mx, my) and pygame.mouse.get_pressed()[0] and not self.mouse_before:
                 self.profile_n = (self.profile_n - 1) % self.profile_image_len
-                self.profile_image = self.profile_images[self.profile_n]
-                self.profile_text = self.profile_texts[self.profile_n]
+                self.data["skin"] = self.profile_n
+                self.profile_image = self.profile_images[self.profile_n - 1]
+                self.profile_text = self.profile_texts[self.profile_n - 1]
+            if self.profile_right_button_rect.collidepoint(mx, my) and pygame.mouse.get_pressed()[0] and not self.mouse_before:
+                self.profile_n = (self.profile_n + 1) % self.profile_image_len
+                self.data["skin"] = self.profile_n
+                self.profile_image = self.profile_images[self.profile_n - 1]
+                self.profile_text = self.profile_texts[self.profile_n - 1]
 
             if pygame.mouse.get_pressed()[0] and not self.mouse_before:
-                if self.profile_input_rect.collidepoint(mx, my):
+                if self.profile_input_rect1.collidepoint(mx, my):
                     active = not active
                 else:
                     active = False
@@ -201,7 +208,7 @@ class Menu:
                 name, True, self.text_color
             )
             text_rect = text_image.get_rect(
-                center=self.profile_input_rect.center
+                center=self.profile_input_rect1.center
             )
             # box
             # header
@@ -233,20 +240,27 @@ class Menu:
                 self.profile_name_text_image,
                 self.profile_name_text_rect
             )
-            self.screen.blit(self.profile_input_image, self.profile_input_rect)
+            if active:
+                self.screen.blit(
+                    self.profile_input_image2,
+                    self.profile_input_rect2
+                )
+            else:
+                self.screen.blit(
+                    self.profile_input_image1,
+                    self.profile_input_rect1
+                )
             self.screen.blit(text_image, text_rect)
             self.draw_cursor()
             pygame.display.update()
             self.mouse_before = pygame.mouse.get_pressed()[0]
-        self.data["skin"] = str(self.profile_n + 1)
-        self.data["name"] = name
 
     def setting(self):
         run = True
         while run:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    exit()
+                    pygame.quit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     run = False
 
@@ -259,9 +273,9 @@ class Menu:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    exit()
+                    pygame.quit()
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                    exit()
+                    pygame.quit()
 
             self.screen.fill(background_color)
             mx, my = pygame.mouse.get_pos()
@@ -277,7 +291,7 @@ class Menu:
                     self.setting()
             if self.menu_image_and_rect[3][1].collidepoint((mx, my)):
                 if pygame.mouse.get_pressed()[0]:
-                    exit()
+                    pygame.quit()
             self.screen.blit(self.logo_image, self.logo_rect)
             self.screen.blit(self.menu_box_image, self.menu_box_rect)
             for image, rect in self.menu_image_and_rect:
@@ -291,4 +305,4 @@ if __name__ == "__main__":
     data = {"skin": 1, "name": ""}
     while run:
         menu = Menu(data)
-        exit()
+        pygame.quit()
