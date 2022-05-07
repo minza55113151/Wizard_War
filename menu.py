@@ -239,7 +239,7 @@ class Menu:
             self.draw_cursor()
             pygame.display.update()
             self.mouse_before = pygame.mouse.get_pressed()[0]
-        self.data["skin"] = skin
+        self.data["skin"] = str(self.profile_n + 1)
         self.data["name"] = name
 
     def setting(self):

@@ -92,6 +92,7 @@ class Network:
             if player_id in player_client_data:
                 player_client_data[player_id]["id"] = player["id"]
                 player_client_data[player_id]["skin"] = player["skin"]
+                player_client_data[player_id]["name"] = player["name"]
                 player_client_data[player_id]["pos"] = player["pos"]
                 player_client_data[player_id]["target_pos"] = player["target_pos"]
                 player_client_data[player_id]["hp"] = player["hp"]
@@ -105,6 +106,7 @@ class Network:
                     "player": None,
                     "id": player["id"],
                     "skin": player["skin"],
+                    "name": player["name"],
                     "pos": player["pos"],
                     "target_pos": player["target_pos"],
                     "hp": player["hp"],
@@ -114,7 +116,7 @@ class Network:
                     "event": player["event"]
                 }
 
-# 5 point to chage data structure
+# 7 point to chage data structure
 # 1.set_client_sending_data
 # 2.update_client_data
 # 3.update_client_data

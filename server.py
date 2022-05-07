@@ -34,9 +34,10 @@ def threaded_client(con):  # threaded client function to handle each client conn
 
     # initial player data in server then send to client
     player_ID = get_player_ID()
-    server_data["player"][player_ID] = {
+    first_sending_data = {
         "id": player_ID,
-        "skin": 0,
+        "skin": 1,
+        "name": "player " + player_ID,
         "pos": start_pos,
         "target_pos": start_pos,
         "hp": 0,
@@ -47,9 +48,14 @@ def threaded_client(con):  # threaded client function to handle each client conn
             "bullets": [],
         }
     }
-    client_data = server_data["player"][player_ID]
-    print(f"[Sending][initial] p{player_ID}: {client_data}")
-    send_data(con, client_data)
+    print(f"[Sending][initial] p{player_ID}: {first_sending_data}")
+    send_data(con, first_sending_data)
+
+    client_data = recv_data(con)
+    print(f"[Recieve][initial] p{player_ID}: {client_data}")
+    server_data["player"][player_ID] = client_data
+    print(f"[Sending][start] p{player_ID}: {server_data}")
+    send_data(con, server_data)
 
     while True:
         try:
@@ -57,6 +63,7 @@ def threaded_client(con):  # threaded client function to handle each client conn
             client_data = recv_data(con)
             print(f"[Recieve] p{player_ID}: {client_data}")
             server_data["player"][player_ID]["skin"] = client_data["skin"]
+            server_data["player"][player_ID]["name"] = client_data["name"]
             server_data["player"][player_ID]["pos"] = client_data["pos"]
             server_data["player"][player_ID]["target_pos"] = client_data["target_pos"]
             server_data["player"][player_ID]["hp"] = client_data["hp"]

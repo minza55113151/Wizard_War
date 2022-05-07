@@ -27,6 +27,7 @@ import random
 # right click walk
 # refactor camera follow by mouse
 # refactor update_stc, other player slow walk
+# init data with server
 
 # done?
 # interpolation
@@ -97,7 +98,7 @@ class Game:
         self.skin = self.data["skin"]
         self.name = self.data["name"]
         # setup network ---------------------------------------------------------
-        self.client_sending_data = {"skin": self.skin}
+        self.client_sending_data = {"skin": self.skin, "name": self.name}
         self.client_data = {"player": {}}
         self.network = Network(self.client_sending_data)
         self.id = self.network.id
@@ -121,7 +122,7 @@ class Game:
                 other_player["player"] = self.player_sprites.create_player(
                     pos=other_player["pos"],
                     skin=other_player["skin"],
-                    name="player " + player_id,
+                    name=other_player["name"],
                     all_sprites_group=self.all_sprites_group
                 )
             # other_player["player"].is_shoot = False

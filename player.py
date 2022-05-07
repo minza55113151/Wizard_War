@@ -63,7 +63,7 @@ class Player(pygame.sprite.Sprite):
             (self.rect.width*2, self.rect.height),
             (0, 0, 0),
             create_font(25, "calibri", bold=True),
-            "MinZung",
+            name,
             (1, 1, 1),
             center=(
                 self.rect.centerx,

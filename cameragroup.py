@@ -199,6 +199,7 @@ class CameraGroup(pygame.sprite.Group):
             if sprite in self.all_sprites_groups["player"]:
                 sprite.draw_hitbox(self.surface, self.offset)
                 sprite.draw_hp(self.surface, self.offset)
+                sprite.draw_name(self.surface, self.offset)
 
         for sprite in self.all_sprites_groups["circle"]:
             self.surface.blit(sprite.image, sprite.rect)
