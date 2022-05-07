@@ -1,3 +1,4 @@
+import random
 import pygame
 from settings import *
 import math
@@ -160,6 +161,32 @@ class UISkill(pygame.sprite.Sprite):
         self.animate()
 
 
+class UIMana(pygame.sprite.Sprite):
+    def __init__(self, group):
+        super().__init__(group)
+        self.max_mp = player_max_mp
+        self.mp = 0
+
+    def update(self):
+        self.mp_border_image = create_surface(
+            UI_mp_border_image_size, UI_mp_border_color
+        )
+        self.mp_image_size = (
+            (self.mp/self.max_mp) * UI_mp_image_size[0],
+            UI_mp_image_size[1]
+        )
+        self.mp_image = create_surface(self.mp_image_size, (0, 0, 120))
+        self.mp_border_image.blit(self.mp_image, UI_mp_border_offset)
+        self.image = self.mp_border_image
+        self.rect = self.image.get_rect(
+            midleft=(
+                width//2 + 50,
+                height - 25
+            )
+        )
+        self.mp = random.randint(0, self.max_mp)
+
+
 class UIBorder(pygame.sprite.Sprite):
     def __init__(self, group, id):
         super().__init__(group)
@@ -185,6 +212,7 @@ class UIGroup(pygame.sprite.Group):
         self.create_border()
         self.create_element()
         self.create_skill()
+        self.create_mana()
 
     def create_element(self):
         elements = UI_element_order
@@ -211,6 +239,9 @@ class UIGroup(pygame.sprite.Group):
     def create_border(self):
         UIBorder(self, "0")
         UIBorder(self, "1")
+
+    def create_mana(self):
+        UIMana(self)
 
     def draw(self):
         for sprite in self.sprites():

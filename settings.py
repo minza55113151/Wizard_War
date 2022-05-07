@@ -6,10 +6,14 @@ draw_hitbox = False
 # endregion game settings
 # region screen settings
 fps = 60
-width = 800
-height = 800
-# width = 1920
-# height = 1080
+# width = 640
+# height = 480
+# width = 1280
+# height = 720
+# width = 1600
+# height = 900
+width = 1920
+height = 1080
 # make it can load image
 pygame.display.set_mode((width, height))
 # endregion screen settings
@@ -304,3 +308,18 @@ UI_border1_image = create_surface(
 w = width//2 - 10 * (UI_element_image_size[0] + 1)//2 - 5
 UI_border1_image_bottomleft = (w, height)
 # endregion UIBorder settings
+# region UIMana settings
+UI_mp_border_offset = (2, 2)
+UI_mp_image_size = (
+    UI_skill_image_size[0]*len(UI_skill_order),
+    UI_skill_image_size[1]//3
+)
+UI_mp_border_image_size = (
+    UI_mp_image_size[0] + UI_mp_border_offset[0]*2,
+    UI_mp_image_size[1] + UI_mp_border_offset[1]*2
+)
+
+
+UI_mp_border_color = (1, 1, 1)
+
+# endregion UIMana settings

@@ -32,6 +32,10 @@ import random
 # name display
 # ping
 # toggle display hitbox
+# text input active color
+# save name
+# read write data
+# mp displayer
 
 # done?
 # interpolation
@@ -52,12 +56,15 @@ import random
 
 # connect everything together
 
-# mp displayer
-# save name
-# read write data
+# element selected display
+
 # shooting check
 # server validation data
-# element selected display
+# connect mp to player
+# skill input
+# element input
+# element 3 stack
+
 
 # Anti Cheat
 
@@ -66,7 +73,6 @@ import random
 # menu font size
 # menu setting
 # menu margin
-# text input active color
 # refactor optimize
 
 
