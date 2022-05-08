@@ -4,9 +4,9 @@ from circle.circle import Circle
 
 
 class CircleGroup(pygame.sprite.Group):
-    def __init__(self, pcmc):
+    def __init__(self):
         super().__init__()
-        self.pcmc = pcmc
+        self.pcmc = draw_plan_camera_mouse_control
         if self.pcmc:
             self.create_pcmc()
 

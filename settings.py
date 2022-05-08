@@ -3,6 +3,7 @@ from utils.utils import *
 
 # region game settings
 draw_hitbox = False
+draw_plan_camera_mouse_control = False
 # endregion game settings
 # region screen settings
 fps = 60
@@ -10,10 +11,10 @@ fps = 60
 # height = 480
 # width = 1280
 # height = 720
-# width = 1600
-# height = 900
-width = 1920
-height = 1080
+width = 1600
+height = 900
+# width = 1920
+# height = 1080
 # make it can load image
 pygame.display.set_mode((width, height))
 # endregion screen settings
@@ -71,7 +72,10 @@ player_hp_border_image_size = (
     player_hp_image_size[1] + player_hp_border_offset[1] * 2
 )
 
-player_hp_image = create_surface(player_hp_image_size, (0, 0, 0))
+player_element_box_size = (
+    player_image_size[0], player_image_size[1]//3
+)
+
 # endregion player settings
 # region projectile settings
 """
@@ -114,6 +118,7 @@ UI_element_keys = [
     pygame.K_d,
     pygame.K_f
 ]
+
 
 UI_element_images = None
 UI_element_image_size = (50, 50)
@@ -227,6 +232,34 @@ UI_fire_image_1 = UI_fire_images[0]
 UI_fire_image_2 = UI_fire_images[1]
 UI_fire_image_3 = pygame.transform.scale(
     UI_fire_image_2, UI_element_image_scaled_size
+)
+
+UI_element_image_small_scaled_size = (
+    player_image_size[0]//3, player_image_size[1]//3
+)
+UI_scale_water_image = pygame.transform.scale(
+    UI_water_image_1, UI_element_image_small_scaled_size
+)
+UI_scale_heal_image = pygame.transform.scale(
+    UI_heal_image_1, UI_element_image_small_scaled_size
+)
+UI_scale_shield_image = pygame.transform.scale(
+    UI_shield_image_1, UI_element_image_small_scaled_size
+)
+UI_scale_ice_image = pygame.transform.scale(
+    UI_ice_image_1, UI_element_image_small_scaled_size
+)
+UI_scale_thunder_image = pygame.transform.scale(
+    UI_thunder_image_1, UI_element_image_small_scaled_size
+)
+UI_scale_death_image = pygame.transform.scale(
+    UI_death_image_1, UI_element_image_small_scaled_size
+)
+UI_scale_stone_image = pygame.transform.scale(
+    UI_stone_image_1, UI_element_image_small_scaled_size
+)
+UI_scale_fire_image = pygame.transform.scale(
+    UI_fire_image_1, UI_element_image_small_scaled_size
 )
 # endregion UI element settings
 # region UISkill settings

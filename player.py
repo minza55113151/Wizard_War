@@ -29,6 +29,11 @@ class Player(pygame.sprite.Sprite):
         self.max_mp = player_max_mp
         self.mp = self.max_mp
 
+        self.elements = []
+        self.keys = dict(zip(UI_element_keys, UI_element_order))
+        self.before_keys = [False] * len(self.keys)
+        self.after_keys = [False] * len(self.keys)
+
         self.bullets = []
         self.move_direction = pygame.math.Vector2()
         self.face_direction = pygame.math.Vector2()
@@ -42,19 +47,6 @@ class Player(pygame.sprite.Sprite):
     def init_player_image(self, pos, skin, name):
         # setup original image
         self.origin_images = player_images_set[skin-1]
-        # setup text
-        # draw_text_to_surface(
-        #     surface=self.origin_image,
-        #     font=create_font(10),
-        #     text=name,
-        #     text_color="white",
-        #     bg_color=(1, 1, 1),
-        #     pos=[
-        #         player_image_size[0]//2,
-        #         player_image_size[1]//2
-        #     ]
-        # )
-
         # setup image and rect
         self.image = self.origin_images[0]
         self.rect = self.image.get_rect(center=pos)
@@ -124,6 +116,50 @@ class Player(pygame.sprite.Sprite):
         offset_pos = self.name_rect.topleft - offset
         screen.blit(self.name_image, offset_pos)
 
+    def draw_element(self, screen, offset=pygame.math.Vector2(0, 0)):
+        print(self.elements)
+        element_box_image = create_surface(
+            (player_element_box_size[0], player_element_box_size[1]),
+        )
+        element_box_rect = element_box_image.get_rect(
+            center=(
+                self.rect.centerx,
+                self.rect.centery + player_image_size[1]//2 +
+                player_element_box_size[1] * 1
+            )
+        )
+        stepx = UI_element_image_small_scaled_size[0]
+        for i in range(len(self.elements)):
+            image = self.elements_image(self.elements[i])
+            rect = image.get_rect(
+                topleft=(
+                    stepx * i,
+                    0
+                )
+            )
+            element_box_image.blit(image, rect)
+        offset_pos = element_box_rect.topleft - offset
+        screen.blit(element_box_image, offset_pos)
+
+    def elements_image(self, element):
+        if element == "water":
+            image = UI_scale_water_image
+        if element == "heal":
+            image = UI_scale_heal_image
+        if element == "shield":
+            image = UI_scale_shield_image
+        if element == "ice":
+            image = UI_scale_ice_image
+        if element == "thunder":
+            image = UI_scale_thunder_image
+        if element == "death":
+            image = UI_scale_death_image
+        if element == "stone":
+            image = UI_scale_stone_image
+        if element == "fire":
+            image = UI_scale_fire_image
+        return image
+
     def animation(self):
         # move_target
         self.move_target_image_frame = (
@@ -133,21 +169,20 @@ class Player(pygame.sprite.Sprite):
         self.image = self.origin_images[int(self.angle)]
         self.rect = self.image.get_rect(center=self.rect.center)
 
-    # def keyboard(self):
-    #     keys = pygame.key.get_pressed()
-    #     if keys[pygame.K_w]:
-    #         self.move_direction.y = -1
-    #     elif keys[pygame.K_s]:
-    #         self.move_direction.y = 1
-    #     else:
-    #         self.move_direction.y = 0
+    def keyboard(self):
+        keyboard = pygame.key.get_pressed()
+        self.before_keys = self.after_keys[:]
+        for i in range(len(self.keys)):
+            self.after_keys[i] = keyboard[list(self.keys.keys())[i]]
+            if self.after_keys[i] and not self.before_keys[i]:
+                element = list(self.keys.values())[i]
+                if not self.is_element_full():
+                    self.elements.append(element)
 
-    #     if keys[pygame.K_a]:
-    #         self.move_direction.x = -1
-    #     elif keys[pygame.K_d]:
-    #         self.move_direction.x = 1
-    #     else:
-    #         self.move_direction.x = 0
+    def is_element_full(self):
+        if len(self.elements) >= 3:
+            return True
+        return False
 
     def set_face_direction(self):
         mouse = pygame.mouse.get_pos()
@@ -227,6 +262,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt, *args, **kwargs):
         if self.control:
+            self.keyboard()
             self.set_face_direction()
             self.set_target_pos()
             self.shoot()

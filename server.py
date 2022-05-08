@@ -66,9 +66,6 @@ def threaded_client(con):  # threaded client function to handle each client conn
             t2 = time.time()
             print(f"p{player_ID} ping {(t2-t1)*1000:.0f} ms")
             # print(f"[Recieve] p{player_ID}: {client_data}")
-            k = 0
-            for i in range(100000):
-                k += i**2
             server_data["player"][player_ID]["skin"] = client_data["skin"]
             server_data["player"][player_ID]["name"] = client_data["name"]
             server_data["player"][player_ID]["pos"] = client_data["pos"]

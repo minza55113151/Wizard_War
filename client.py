@@ -65,6 +65,7 @@ import random
 # element input
 # element 3 stack
 
+# root of mp should be in player and send value to uimana
 
 # Anti Cheat
 
@@ -74,6 +75,9 @@ import random
 # menu setting
 # menu margin
 # refactor optimize
+
+# connect zone for connect obj to another obj like set_all_player_sprites()
+# server give func to check file game
 
 
 class Game:
@@ -88,11 +92,13 @@ class Game:
         pygame.mouse.set_visible(False)
         self.clock = pygame.time.Clock()
         self.running = True
+        # setup player data -----------------------------------------------------
         self.data = data
+        self.skin = self.data["skin"]
+        self.name = self.data["name"]
         # setup sprites ----------------------------------------------------------
         self.tile_sprites = TileGroup()
-        self.tile_sprites.create_random_tile(2000)
-        self.circle_sprites = CircleGroup(pcmc=False)
+        self.circle_sprites = CircleGroup()
         self.projectile_sprites = pygame.sprite.Group()
         self.player_sprites = PlayerGroup()
         self.UI_sprites = UIGroup()
@@ -103,14 +109,10 @@ class Game:
             "player": self.player_sprites,
             "UI": self.UI_sprites
         }
-        # setup player data -----------------------------------------------------
-        self.skin = self.data["skin"]
-        self.name = self.data["name"]
         # setup network ---------------------------------------------------------
         self.client_sending_data = {"skin": self.skin, "name": self.name}
         self.client_data = {"player": {}}
-        self.network = Network(self.client_sending_data)
-        self.id = self.network.id
+        self.network = Network()
         # setup player ----------------------------------------------------------
         self.player = self.player_sprites.create_player(
             pos=self.network.pos,
@@ -121,9 +123,19 @@ class Game:
             all_sprites_group=self.all_sprites_group
         )
         # setup layer -----------------------------------------------------------
-        self.layer = Layer(self.all_sprites_group)
+        self.layer = Layer()
         # setup other -----------------------------------------------------------
+        self.network.set_client_sending_data(self.client_sending_data)
+        self.network.reset_client_sending_data()
+        self.network.set_client_data(self.client_data)
+        self.layer.set_all_sprites_group(self.all_sprites_group)
+        self.layer.set_UI_sprites(self.UI_sprites)
+        self.layer.camera.set_all_sprites_groups(self.all_sprites_group)
+        self.layer.camera.set_player(self.player)
+        self.player.set_pcmc_vec(self.layer.camera.pcmc_vec)
         self.key = None
+        # setup create map -------------------------------------------------------
+        self.tile_sprites.create_random_tile(2000)
 
     def update_stc(self):
         # update data from server to client
@@ -159,11 +171,11 @@ class Game:
         self.network.get_server_data()
         # prepare data from server -----------------------------------------------
         self.server_data = self.network.server_data
-        self.network.update_client_data(self.client_data)
+        self.network.update_client_data()
         # update data from server to client -------------------------------------
         self.update_stc()
         # set sending data for sending to server --------------------------------
-        self.network.set_client_sending_data(self.player)
+        self.network.reset_client_sending_data(self.player)
 
     def event_handler(self):
         for event in pygame.event.get():

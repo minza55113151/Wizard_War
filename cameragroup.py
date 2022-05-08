@@ -3,16 +3,14 @@ from settings import *
 
 
 class CameraGroup(pygame.sprite.Group):
-    def __init__(self, all_sprites_groups):
+    def __init__(self):
         super().__init__()
         self.screen = pygame.display.get_surface()
         self.width = self.screen.get_width()
         self.height = self.screen.get_height()
         self.offset = pygame.math.Vector2()
         self.pcmc_vec = pygame.math.Vector2()
-        self.all_sprites_groups = all_sprites_groups
-        self.player = self.all_sprites_groups["player"].get_player()
-        self.player.set_pcmc_vec(self.pcmc_vec)
+
         # region box setup [nessary]
         self.camera_boarders = {
             "left": 200,
@@ -52,6 +50,12 @@ class CameraGroup(pygame.sprite.Group):
         self.internal_offset.y = self.internal_surface_size[1] // 2 - \
             self.height // 2
         # endregion
+
+    def set_all_sprites_groups(self, all_sprites_groups):
+        self.all_sprites_groups = all_sprites_groups
+
+    def set_player(self, player):
+        self.player = player
 
     def sprites(self):
         sprites = []
@@ -201,7 +205,7 @@ class CameraGroup(pygame.sprite.Group):
                     sprite.draw_hitbox(self.surface, self.offset)
                 sprite.draw_hp(self.surface, self.offset)
                 sprite.draw_name(self.surface, self.offset)
-
+        # circle
         for sprite in self.all_sprites_groups["circle"]:
             self.surface.blit(sprite.image, sprite.rect)
         # player move target point
@@ -216,5 +220,7 @@ class CameraGroup(pygame.sprite.Group):
         self.player.draw_hp(self.surface, self.offset)
         # playey name
         self.player.draw_name(self.surface, self.offset)
+        # player selected element
+        self.player.draw_element(self.surface, self.offset)
         # self.post_zoom()
         pass

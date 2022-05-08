@@ -303,6 +303,4 @@ class Menu:
 if __name__ == "__main__":
     run = True
     data = {"skin": 1, "name": ""}
-    while run:
-        menu = Menu(data)
-        pygame.quit()
+    menu = Menu(data)
