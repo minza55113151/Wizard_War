@@ -6,7 +6,7 @@ from tile.tilegroup import TileGroup
 from layer import Layer
 from network import Network
 from playergroup import PlayerGroup
-from projectile import Projectile
+from projectilegroup import ProjectileGroup
 from ui import UIGroup
 from menu import Menu
 import random
@@ -36,6 +36,7 @@ import random
 # save name
 # read write data
 # mp displayer
+# element input
 
 # done?
 # interpolation
@@ -62,7 +63,6 @@ import random
 # server validation data
 # connect mp to player
 # skill input
-# element input
 # element 3 stack
 
 # root of mp should be in player and send value to uimana
@@ -99,7 +99,7 @@ class Game:
         # setup sprites ----------------------------------------------------------
         self.tile_sprites = TileGroup()
         self.circle_sprites = CircleGroup()
-        self.projectile_sprites = pygame.sprite.Group()
+        self.projectile_sprites = ProjectileGroup()
         self.player_sprites = PlayerGroup()
         self.UI_sprites = UIGroup()
         self.all_sprites_group = {
@@ -133,6 +133,7 @@ class Game:
         self.layer.camera.set_all_sprites_groups(self.all_sprites_group)
         self.layer.camera.set_player(self.player)
         self.player.set_pcmc_vec(self.layer.camera.pcmc_vec)
+        self.projectile_sprites.set_all_sprites_group(self.all_sprites_group)
         self.key = None
         # setup create map -------------------------------------------------------
         self.tile_sprites.create_random_tile(2000)
@@ -154,7 +155,7 @@ class Game:
                 bullets = other_player["event"]["bullets"]
                 for bullet in bullets:
                     face_direction = pygame.math.Vector2(*bullet["direction"])
-                    Projectile(
+                    self.projectile_sprites.create_projectile(
                         other_player["player"],
                         bullet["pos"],
                         face_direction,
