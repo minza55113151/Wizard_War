@@ -159,7 +159,7 @@ class Game:
                         other_player["player"],
                         bullet["pos"],
                         face_direction,
-                        all_sprites_group=self.all_sprites_group
+                        bullet["elements"],
                     )
             other_player["player"].target_pos = other_player["target_pos"]
             other_player["player"].hp = other_player["hp"]

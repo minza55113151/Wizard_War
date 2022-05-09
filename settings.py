@@ -90,12 +90,104 @@ projectile types have 8 types
 8.fire(f)
 """
 projectile_image_path = "assets/black.png"
-projectile_image = load_img(projectile_image_path, gb_colorkey)
 projectile_image_size = (5, 5)
-projectile_speed = 20
-projectile_rotation_speed = 30
+projectile_image = load_img(projectile_image_path, gb_colorkey)
+projectile_image = pygame.transform.scale(
+    projectile_image, projectile_image_size
+)
+projectile_images = create_360(projectile_image)
+projectile_speed = 10
 projectile_life_time = 5
 projectile_max_health = fps * projectile_life_time
+
+projectile_spread_image_size = (15, 15)
+projectile_spread_speed = 15
+projectile_spread_life_time = 0.25
+projectile_spread_max_health = projectile_spread_life_time * fps
+projectile_laser_image_size = (60, 15)
+projectile_laser_speed = 45
+projectile_laser_life_time = 0.5
+projectile_laser_max_health = projectile_laser_life_time * fps
+projectile_projectile_image_size = (50, 50)
+projectile_projectile_speed = 50
+projectile_projectile_life_time = 5
+projectile_projectile_max_health = projectile_projectile_life_time * fps
+projectile_shield_image_size = (5, 100)
+projectile_shield_speed = 0
+projectile_shield_life_time = 5
+projectile_shield_max_health = projectile_shield_life_time * fps
+projectile_shield_offset = 50
+
+projectile_water_images = create_360_surface(
+    projectile_spread_image_size,
+    "cyan"
+)
+projectile_heal_images = create_360_surface(
+    projectile_laser_image_size,
+    "green"
+)
+
+projectile_shield_images = create_360_surface(
+    projectile_shield_image_size,
+    "yellow"
+)
+
+projectile_ice_images = create_360_surface(
+    projectile_spread_image_size,
+    "white"
+)
+
+projectile_thunder_images = create_360_surface(
+    projectile_spread_image_size,
+    "purple"
+)
+
+projectile_death_images = create_360_surface(
+    projectile_laser_image_size,
+    "red"
+)
+projectile_stone_images = create_360_surface(
+    projectile_projectile_image_size,
+    "brown"
+)
+projectile_fire_images = create_360_surface(
+    projectile_spread_image_size,
+    "orange"
+)
+projectile_steam_images = create_360_surface(
+    projectile_spread_image_size,
+    "grey"
+)
+projectile_data = {
+    "water": {
+        "damage": 1,
+        "knockback": 1,
+    },
+    "heal": {
+        "damage": -1
+    },
+    "shield": {
+        "damage": 0,
+    },
+    "ice": {
+        "damage": 1,
+        "slow": 1
+    },
+    "thunder": {
+        "damage": 1,
+        "stun": 1
+    },
+    "death": {
+        "damage": 2,
+    },
+    "stone": {
+        "damage": 3,
+    },
+    "fire": {
+        "damage": 1,
+        "burn": 1
+    }
+}
 # endregion projectile settings
 # region tile settings
 tile_image_path = ""

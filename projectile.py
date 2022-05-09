@@ -3,31 +3,36 @@ from settings import *
 
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, author, pos, direction, **kwargs):
-        self.all_sprites_group = kwargs["all_sprites_group"]
+    def __init__(self, all_sprites_group, author, pos, direction, atk_type, elements, images, **kwargs):
+        self.all_sprites_group = all_sprites_group
         self.player_sprites = self.all_sprites_group["player"]
         super().__init__(self.all_sprites_group["projectile"])
         self.author = author
         self.direction = direction
-        self.speed = projectile_speed
-        # self.rotate_speed = projectile_rotation_speed
-        self.max_health = projectile_max_health
-        self.health = projectile_max_health
-        self.origin_image = projectile_image
-        self.origin_image = pygame.transform.scale(
-            self.origin_image,
-            projectile_image_size
-        )
-        self.origin_image = pygame.transform.rotate(
-            self.origin_image,
-            self.direction.angle_to(
-                pygame.math.Vector2(1, 0)
-            )
-        )
-        self.image = self.origin_image
+        if atk_type == "spread":
+            self.speed = projectile_spread_speed
+            self.max_health = projectile_spread_max_health
+        if atk_type == "laser":
+            self.speed = projectile_laser_speed
+            self.max_health = projectile_laser_max_health
+        if atk_type == "projectile":
+            self.speed = projectile_projectile_speed
+            self.max_health = projectile_projectile_max_health
+        if atk_type == "shield":
+            self.speed = projectile_shield_speed
+            self.max_health = projectile_shield_max_health
+        self.health = self.max_health
+        self.damage = kwargs.get("damage", 0)
+        self.knockback = kwargs.get("knockback", 0)
+        self.burn = kwargs.get("burn", 0)
+        self.slow = kwargs.get("slow", 0)
+        self.stun = kwargs.get("stun", 0)
+        self.origin_images = images
+        self.angle = direction.angle_to(
+            pygame.math.Vector2(1, 0)
+        ) + 180
+        self.image = self.origin_images[int(self.angle)]
         self.rect = self.image.get_rect(center=pos)
-
-        self.angle = 0
 
     def move(self, dt):
         if self.direction.magnitude() != 0:
@@ -44,8 +49,21 @@ class Projectile(pygame.sprite.Sprite):
         sprite = self.player_sprites.collide_player(self)
         if sprite != None and sprite != self.author:
             print(sprite.name)
+            if self.stun:
+                print("stun")
+            if self.knockback:
+                print("knockback")
+            if self.burn:
+                print("burn")
+            if self.slow:
+                print("slow")
+            sprite.hp -= self.damage
+            self.kill()
 
     def update(self, dt, *args, **kwargs):
         self.move(dt)
         self.iscollide()
         self.life()
+
+
+#

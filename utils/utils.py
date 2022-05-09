@@ -52,6 +52,11 @@ def create_360(surface):
     return images
 
 
+def create_360_surface(size, color=(0, 0, 0), colorkey=(0, 0, 0)):
+    surface = create_surface(size, color, colorkey)
+    return create_360(surface)
+
+
 def create_surface(size, color=(0, 0, 0), colorkey=(0, 0, 0)):
     surface = pygame.Surface(size).convert()
     surface.set_colorkey(colorkey)

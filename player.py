@@ -10,6 +10,7 @@ class Player(pygame.sprite.Sprite):
 
         self.client_sending_data = kwargs.get("client_sending_data")
         self.all_sprites_group = kwargs["all_sprites_group"]
+        self.projectile_sprites = self.all_sprites_group["projectile"]
         super().__init__(self.all_sprites_group["player"])
         self.init_player_image(pos, skin, name)
         self.init_move_target_image()
@@ -40,6 +41,7 @@ class Player(pygame.sprite.Sprite):
         self.pcmc_vec = pygame.math.Vector2()
         self.is_shoot = False
         self.angle = 0
+        self.cooldown = 3*fps
 
     def set_pcmc_vec(self, pcmc_vec):
         self.pcmc_vec = pcmc_vec
@@ -63,7 +65,6 @@ class Player(pygame.sprite.Sprite):
                 player_hp_image_size[1] * 6
             )
         )
-        print(self.name_image, self.name_rect)
 
     def init_move_target_image(self):
         self.move_target_images = player_move_target_images
@@ -105,8 +106,6 @@ class Player(pygame.sprite.Sprite):
         offset_pos = self.hp_rect.topleft - offset
         screen.blit(self.hp_image, offset_pos)
 
-        self.hp = random.randint(0, self.max_hp)
-
     def draw_name(self, screen, offset=pygame.math.Vector2(0, 0)):
         self.name_rect.center = (
             self.rect.centerx,
@@ -117,7 +116,6 @@ class Player(pygame.sprite.Sprite):
         screen.blit(self.name_image, offset_pos)
 
     def draw_element(self, screen, offset=pygame.math.Vector2(0, 0)):
-        print(self.elements)
         element_box_image = create_surface(
             (player_element_box_size[0], player_element_box_size[1]),
         )
@@ -207,26 +205,34 @@ class Player(pygame.sprite.Sprite):
         if self.is_shoot:
             self.is_shoot = False
             self.bullets = []
-        if pygame.mouse.get_pressed()[0]:
-            if self.face_direction.magnitude() != 0:
-                self.is_shoot = True
-                if self.move_direction.magnitude() != 0:
-                    self.bullet_direction = (self.face_direction.normalize() * projectile_speed +
-                                             self.move_direction.normalize() * self.slow_speed).normalize()
-                else:
-                    self.bullet_direction = self.face_direction
-                self.bullet_direction.normalize_ip()
-                bullet = {
-                    "pos": [self.rect.centerx, self.rect.centery],
-                    "direction": [self.bullet_direction.x, self.bullet_direction.y]
-                }
-                self.bullets.append(bullet)
-                Projectile(
-                    self,
-                    self.rect.center,
-                    self.bullet_direction,
-                    all_sprites_group=self.all_sprites_group
-                )
+        if pygame.mouse.get_pressed()[0] and self.face_direction.magnitude() != 0 and self.elements != []:
+            self.is_shoot = True
+
+            if self.move_direction.magnitude() != 0:
+                self.bullet_direction = (self.face_direction.normalize() * projectile_speed +
+                                         self.move_direction.normalize() * self.slow_speed).normalize()
+            else:
+                self.bullet_direction = self.face_direction
+            self.bullet_direction.normalize_ip()
+
+            self.elements.sort()
+
+            self.projectile_sprites.create_projectile(
+                self,
+                self.rect.center,
+                self.bullet_direction,
+                self.elements
+            )
+            bullet = {
+                "pos": [*self.rect.center],
+                "direction": [self.bullet_direction.x, self.bullet_direction.y],
+                "elements": [*self.elements],
+            }
+            self.bullets.append(bullet)
+            self.cooldown -= 1
+        if self.cooldown <= 0:
+            self.elements = []
+            self.cooldown = 3 * fps
 
     def move(self, dt):
         self.move_direction = pygame.math.Vector2(
@@ -268,6 +274,7 @@ class Player(pygame.sprite.Sprite):
             self.shoot()
             # self.keyboard()
             self.set_speed()
+            # self.set_mp()
             self.send_data()
         self.move(dt)
         self.animation()
