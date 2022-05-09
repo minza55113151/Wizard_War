@@ -41,7 +41,11 @@ class Player(pygame.sprite.Sprite):
         self.pcmc_vec = pygame.math.Vector2()
         self.is_shoot = False
         self.angle = 0
-        self.cooldown = 3*fps
+        self.max_cooldown = projectile_max_cooldown
+        self.cooldown = 0
+
+        self.after_mouse = False
+        self.before_mouse = False
 
     def set_pcmc_vec(self, pcmc_vec):
         self.pcmc_vec = pcmc_vec
@@ -202,10 +206,12 @@ class Player(pygame.sprite.Sprite):
 
     def shoot(self):
         # reset bullet and is_shoot
+        self.before_mouse = self.after_mouse
+        self.after_mouse = pygame.mouse.get_pressed()[0]
         if self.is_shoot:
             self.is_shoot = False
             self.bullets = []
-        if pygame.mouse.get_pressed()[0] and self.face_direction.magnitude() != 0 and self.elements != []:
+        if self.after_mouse and self.face_direction.magnitude() != 0 and self.elements != []:
             self.is_shoot = True
 
             if self.move_direction.magnitude() != 0:
@@ -215,7 +221,7 @@ class Player(pygame.sprite.Sprite):
                 self.bullet_direction = self.face_direction
             self.bullet_direction.normalize_ip()
 
-            self.elements.sort()
+            # self.elements.sort()
 
             self.projectile_sprites.create_projectile(
                 self,
@@ -229,10 +235,12 @@ class Player(pygame.sprite.Sprite):
                 "elements": [*self.elements],
             }
             self.bullets.append(bullet)
+            if not self.before_mouse and self.after_mouse:
+                self.cooldown = self.max_cooldown
             self.cooldown -= 1
-        if self.cooldown <= 0:
+        if self.before_mouse and not self.after_mouse or self.cooldown <= 0:
+            self.cooldown = 1
             self.elements = []
-            self.cooldown = 3 * fps
 
     def move(self, dt):
         self.move_direction = pygame.math.Vector2(
@@ -261,10 +269,11 @@ class Player(pygame.sprite.Sprite):
         self.client_sending_data["hp"] = self.hp
         self.client_sending_data["mp"] = self.mp
         self.client_sending_data["event"]["bullets"] = self.bullets
-        # def rotate(self):
-        #     self.image = pygame.transform.rotate(self.origin_image, self.angle)
-        #     self.rect = self.image.get_rect(center=self.rect.center)
-        #     self.angle += self.rotate_speed
+
+    def life(self):
+        if self.hp <= 0:
+            self.hp = player_max_hp
+            self.rect.center = (0, 0)
 
     def update(self, dt, *args, **kwargs):
         if self.control:
@@ -276,5 +285,6 @@ class Player(pygame.sprite.Sprite):
             self.set_speed()
             # self.set_mp()
             self.send_data()
+        self.life()
         self.move(dt)
         self.animation()

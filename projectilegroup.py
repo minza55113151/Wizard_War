@@ -62,8 +62,16 @@ class ProjectileGroup(pygame.sprite.Group):
             elif "thunder" == elements[0]:
                 images = projectile_thunder_images
             kwargs = self.kwargs_element_stat(elements)
+            direction_left = direction.rotate(-15)
+            direction_right = direction.rotate(15)
             Projectile(
                 self.all_sprites_group, author, pos, direction, atk_type, elements, images, **kwargs
+            )
+            Projectile(
+                self.all_sprites_group, author, pos, direction_left, atk_type, elements, images, **kwargs
+            )
+            Projectile(
+                self.all_sprites_group, author, pos, direction_right, atk_type, elements, images, **kwargs
             )
         return None
         if elements == ["water"]:

@@ -149,9 +149,7 @@ class Game:
                     name=other_player["name"],
                     all_sprites_group=self.all_sprites_group
                 )
-            # other_player["player"].is_shoot = False
             if other_player["event"]["bullets"]:
-                # other_player["player"].is_shoot = True
                 bullets = other_player["event"]["bullets"]
                 for bullet in bullets:
                     face_direction = pygame.math.Vector2(*bullet["direction"])

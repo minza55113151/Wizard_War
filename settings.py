@@ -160,34 +160,35 @@ projectile_steam_images = create_360_surface(
 )
 projectile_data = {
     "water": {
-        "damage": 1,
-        "knockback": 1,
+        "damage": 0.25,
+        "knockback": 0.25,
     },
     "heal": {
-        "damage": -1
+        "damage": -0.25
     },
     "shield": {
         "damage": 0,
     },
     "ice": {
-        "damage": 1,
-        "slow": 1
+        "damage": 0.25,
+        "slow": 0.25
     },
     "thunder": {
-        "damage": 1,
-        "stun": 1
+        "damage": 0.25,
+        "stun": 0.25
     },
     "death": {
-        "damage": 2,
+        "damage": 0.5,
     },
     "stone": {
-        "damage": 3,
+        "damage": 0.75,
     },
     "fire": {
-        "damage": 1,
-        "burn": 1
+        "damage": 0.25,
+        "burn": 0.25
     }
 }
+projectile_max_cooldown = 3 * fps
 # endregion projectile settings
 # region tile settings
 tile_image_path = ""
