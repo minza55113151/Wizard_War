@@ -3,7 +3,7 @@ from settings import *
 
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, all_sprites_group, author, pos, direction, atk_type, elements, images, **kwargs):
+    def __init__(self, all_sprites_group, author, pos, direction, atk_type, element, images, **kwargs):
         self.all_sprites_group = all_sprites_group
         self.player_sprites = self.all_sprites_group["player"]
         super().__init__(self.all_sprites_group["projectile"])

@@ -71,11 +71,6 @@ player_hp_border_image_size = (
     player_hp_image_size[0] + player_hp_border_offset[0] * 2,
     player_hp_image_size[1] + player_hp_border_offset[1] * 2
 )
-
-player_element_box_size = (
-    player_image_size[0], player_image_size[1]//3
-)
-
 # endregion player settings
 # region projectile settings
 """

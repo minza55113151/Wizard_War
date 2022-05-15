@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.max_mp = player_max_mp
         self.mp = self.max_mp
 
-        self.elements = []
+        self.element = None
         self.keys = dict(zip(UI_element_keys, UI_element_order))
         self.before_keys = [False] * len(self.keys)
         self.after_keys = [False] * len(self.keys)
@@ -120,28 +120,17 @@ class Player(pygame.sprite.Sprite):
         screen.blit(self.name_image, offset_pos)
 
     def draw_element(self, screen, offset=pygame.math.Vector2(0, 0)):
-        element_box_image = create_surface(
-            (player_element_box_size[0], player_element_box_size[1]),
-        )
-        element_box_rect = element_box_image.get_rect(
+        if self.element == None:
+            return
+        image = self.elements_image(self.element)
+        rect = image.get_rect(
             center=(
                 self.rect.centerx,
-                self.rect.centery + player_image_size[1]//2 +
-                player_element_box_size[1] * 1
+                self.rect.centery + player_image_size[1]//2
             )
         )
-        stepx = UI_element_image_small_scaled_size[0]
-        for i in range(len(self.elements)):
-            image = self.elements_image(self.elements[i])
-            rect = image.get_rect(
-                topleft=(
-                    stepx * i,
-                    0
-                )
-            )
-            element_box_image.blit(image, rect)
-        offset_pos = element_box_rect.topleft - offset
-        screen.blit(element_box_image, offset_pos)
+        offset_pos = rect.topleft - offset
+        screen.blit(image, offset_pos)
 
     def elements_image(self, element):
         if element == "water":
@@ -177,14 +166,7 @@ class Player(pygame.sprite.Sprite):
         for i in range(len(self.keys)):
             self.after_keys[i] = keyboard[list(self.keys.keys())[i]]
             if self.after_keys[i] and not self.before_keys[i]:
-                element = list(self.keys.values())[i]
-                if not self.is_element_full():
-                    self.elements.append(element)
-
-    def is_element_full(self):
-        if len(self.elements) >= 3:
-            return True
-        return False
+                self.element = list(self.keys.values())[i]
 
     def set_face_direction(self):
         mouse = pygame.mouse.get_pos()
@@ -211,7 +193,7 @@ class Player(pygame.sprite.Sprite):
         if self.is_shoot:
             self.is_shoot = False
             self.bullets = []
-        if self.after_mouse and self.face_direction.magnitude() != 0 and self.elements != []:
+        if self.after_mouse and self.face_direction.magnitude() != 0 and self.element != None:
             self.is_shoot = True
 
             if self.move_direction.magnitude() != 0:
@@ -221,18 +203,16 @@ class Player(pygame.sprite.Sprite):
                 self.bullet_direction = self.face_direction
             self.bullet_direction.normalize_ip()
 
-            # self.elements.sort()
-
             self.projectile_sprites.create_projectile(
                 self,
                 self.rect.center,
                 self.bullet_direction,
-                self.elements
+                self.element
             )
             bullet = {
                 "pos": [*self.rect.center],
                 "direction": [self.bullet_direction.x, self.bullet_direction.y],
-                "elements": [*self.elements],
+                "elements": self.element,
             }
             self.bullets.append(bullet)
             if not self.before_mouse and self.after_mouse:
@@ -240,7 +220,7 @@ class Player(pygame.sprite.Sprite):
             self.cooldown -= 1
         if self.before_mouse and not self.after_mouse or self.cooldown <= 0:
             self.cooldown = 1
-            self.elements = []
+            self.element = None
 
     def move(self, dt):
         self.move_direction = pygame.math.Vector2(
